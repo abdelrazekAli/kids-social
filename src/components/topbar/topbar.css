@@ -1,0 +1,24 @@
+.topbarContainer {
+  height: 55px;
+  width: 100%;
+  background-color: #0080ff;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.logo {
+  font-size: 24px;
+  margin-left: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    margin-left: 70px;
+  }
+}

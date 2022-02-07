@@ -1,0 +1,17 @@
+.feed {
+  flex: 5.5;
+}
+
+.feedWrapper {
+  padding: 20px;
+}
+.profileRightBottom .feedWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 30px;
+}
+@media (max-width: 576px) {
+  .feedWrapper {
+    padding: 10px;
+  }
+}
