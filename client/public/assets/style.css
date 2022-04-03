@@ -1,0 +1,66 @@
+* {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+}
+body {
+  color: #212529;
+}
+
+a {
+  text-decoration: none;
+  color: #212529;
+}
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mb-2 {
+  margin-bottom: 2rem;
+}
+.my-1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.mt-1 {
+  margin-top: 1rem;
+}
+.mt-2 {
+  margin-top: 2rem;
+}
+.color-main {
+  color: #0080ff !important;
+}
+
+.btn {
+  display: inline-block;
+  min-width: 5rem;
+  font-weight: 400;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.btn-confirm {
+  color: #fff;
+  background-color: #0080ff;
+  margin-right: 7px;
+}
+.btn-confirm:hover {
+  background-color: #076dd2;
+}
+.btn-delete {
+  background-color: #e4e6eb;
+}
+.btn-delete:hover {
+  background-color: #d8d8da;
+}
+
+.btn-red {
+  color: #fff;
+  background-color: #dc3545;
+}
+.btn-red:hover {
+  background-color: #bb2d3b;
+}

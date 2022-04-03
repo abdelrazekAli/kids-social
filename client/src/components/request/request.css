@@ -1,0 +1,24 @@
+.request {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  background-color: #f1f1f1;
+  border-radius: 6px;
+  padding: 10px;
+  margin: 20px;
+}
+.request:hover {
+  background-color: #ececec;
+}
+.req-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 10px;
+}
+.req-details {
+  margin: 10px;
+}
+.req-details h3 {
+  padding-bottom: 8px;
+}

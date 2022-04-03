@@ -1,0 +1,236 @@
+.sidebar {
+  flex: 3;
+  height: calc(100vh - 50px);
+  overflow-y: scroll;
+  position: sticky;
+  top: 50px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 179, 179);
+}
+
+.sidebarWrapper {
+  padding: 20px;
+}
+
+.sidebarList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebarListItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+.sidebarListItem:hover,
+.sidebarListItem:active {
+  color: #0080ff;
+}
+.sidebarIcon {
+  margin-right: 15px;
+}
+
+.sidebarButton {
+  width: 150px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.sidebarHr {
+  margin: 20px 0;
+  opacity: 0.5;
+}
+
+.sidebarFriendList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.topbarCenter {
+  flex: 5;
+}
+.searchbar {
+  width: 100%;
+  height: 30px;
+  background-color: white;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.searchInput {
+  border: none;
+  width: 100%;
+  font-size: 17px;
+}
+
+.searchInput:focus {
+  outline: none;
+}
+
+.active {
+  color: #0080ff;
+}
+.d-block {
+  display: block !important;
+  width: 50rem;
+}
+.hide-root {
+  overflow: hidden;
+}
+/* Toggle button */
+.toggle-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 24px;
+  width: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  box-sizing: border-box;
+  margin-left: 20px;
+  position: fixed;
+  top: 15px;
+  left: 0;
+  z-index: 999;
+}
+
+.toggle-button:focus {
+  outline: none;
+}
+
+.toggle-button-line {
+  width: 30px;
+  height: 2px;
+  background: white;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+}
+@media (min-width: 769px) {
+  .toggle-button {
+    display: none;
+  }
+}
+@media (max-width: 576px) {
+  .searchbar {
+    margin-left: 0;
+  }
+  .searchInput {
+    width: 100%;
+  }
+  .sidebarWrapper {
+    padding: 10px;
+  }
+  .sidebar input::placeholder {
+    opacity: 0;
+  }
+}
+
+.p-relative {
+  position: relative;
+}
+
+/* Modal */
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /*ll width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 30px;
+  border: 1px solid #888;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 7px;
+}
+.modal-content h3 {
+  font-size: 20px;
+}
+
+/* The Close Button */
+.modal-close {
+  color: #aaaaaa;
+  font-size: 30px;
+  font-weight: bold;
+  position: absolute;
+  right: 0.6rem;
+  top: 0rem;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.invite-input {
+  display: block;
+  margin: 20px auto;
+  padding: 10px;
+  font-size: 1rem;
+  border: 2px solid #e7e7e7;
+  background-color: #fcfcfc;
+}
+
+.invite-input.button {
+  border: none;
+  color: white;
+  background-color: #15cd72;
+  cursor: pointer;
+  width: 50%;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.invite-input.button:hover {
+  background-color: #0ec067;
+}
+
+.invite-form {
+  display: flex;
+}
+@media (max-width: 768px) {
+  .invite-form {
+    flex-direction: column;
+  }
+  .invite-input {
+    margin: 10px auto;
+  }
+  .invite-input.button {
+    margin: 5px auto;
+  }
+}
