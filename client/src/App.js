@@ -33,7 +33,7 @@ function App() {
             <Route path="/posts/:postId" component={PostDetails} />
             <Route path="/requests" component={Requests} />
             <Route path="/chats" component={Chats} />
-            <Route path="/chat/:userId" component={Chat} />
+            <Route path="/chat/:friendId" component={Chat} />
           </>
         ) : (
           <>

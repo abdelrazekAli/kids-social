@@ -13,6 +13,7 @@ router.get("/:userId", async (req, res) => {
       ? res.status(400).send(result)
       : ({ password, updatedAt, ...others } = result._doc);
     res.status(200).json(others);
+    console.log(others);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -73,7 +74,7 @@ router.put("/:id/add", auth, async (req, res) => {
         ? res.status(400).send(result2)
         : (friend = result2);
 
-      if (friend.family.find((u) => u._id == userId)) {
+      if (friend.friends.find((u) => u._id == userId)) {
         return res.status(403).json("you already friend with this user");
       } else if (user.sentRequests.includes(friendId)) {
         return res
@@ -115,7 +116,7 @@ router.delete("/:id/cancel", auth, async (req, res) => {
         ? res.status(400).send(result2)
         : (friend = result2);
 
-      if (!friend.family.find((u) => u._id == userId)) {
+      if (!friend.friends.find((u) => u._id == userId)) {
         await Promise.all([
           // Remove friend id from user sentRequests
           user.updateOne({ $pull: { sentRequests: friendId } }),
@@ -153,7 +154,7 @@ router.delete("/:id/reject", auth, async (req, res) => {
         ? res.status(400).send(result2)
         : (friend = result2);
 
-      if (!friend.family.find((u) => u._id == userId)) {
+      if (!friend.friends.find((u) => u._id == userId)) {
         await Promise.all([
           // Remove friend id from user friendRequests
           user.updateOne({ $pull: { friendRequests: friendId } }),
@@ -192,16 +193,16 @@ router.put("/:id/accept", auth, async (req, res) => {
         ? res.status(400).send(result2)
         : (friend = result2);
 
-      if (!friend.family.find((u) => u._id == userId)) {
+      if (!friend.friends.find((u) => u._id == userId)) {
         await Promise.all([
           // Remove friend id from user sentRequests
           friend.updateOne({ $pull: { sentRequests: userId } }),
           // Remove user id from friend friendRequests
           user.updateOne({ $pull: { friendRequests: friendId } }),
-          // Add user id to friend family
-          friend.updateOne({ $push: { family: userId } }),
-          // Add friend id to user family
-          user.updateOne({ $push: { family: friendId } }),
+          // Add user id to friend friends
+          friend.updateOne({ $push: { friends: userId } }),
+          // Add friend id to user friends
+          user.updateOne({ $push: { friends: friendId } }),
         ]);
         res.status(200).json("request has been accepted");
       } else {
@@ -234,12 +235,12 @@ router.put("/:id/delete", auth, async (req, res) => {
         ? res.status(400).send(result2)
         : (friend = result2);
 
-      if (friend.family.find((u) => u._id == userId)) {
+      if (friend.friends.find((u) => u._id == userId)) {
         await Promise.all([
-          // Remove friend id from user family
-          user.updateOne({ $pull: { family: friendId } }),
-          // Remove user id from friend family
-          friend.updateOne({ $pull: { family: userId } }),
+          // Remove friend id from user friends
+          user.updateOne({ $pull: { friends: friendId } }),
+          // Remove user id from friend friends
+          friend.updateOne({ $pull: { friends: userId } }),
         ]);
         res.status(200).json("friend has been deleted");
       } else {
@@ -254,18 +255,18 @@ router.put("/:id/delete", auth, async (req, res) => {
   }
 });
 
-//Get user's all family
-router.get("/family/:userId", async (req, res) => {
-  let family;
+//Get user's all friends
+router.get("/friends/:userId", async (req, res) => {
+  let friends;
   const { userId } = req.params;
   try {
     // Check user id
     let result = await checkUserId(userId);
     typeof result === "string"
       ? res.status(400).send(result)
-      : ({ family } = result);
+      : ({ friends } = result);
 
-    res.status(200).json(family);
+    res.status(200).json(friends);
   } catch (err) {
     res.status(500).json(err);
   }

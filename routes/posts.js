@@ -81,7 +81,7 @@ router.get("/timeline/:userId", async (req, res) => {
 
     // get timeline posts
     const posts = await Post.find({
-      userId: { $in: [user._id, ...user.family] },
+      userId: { $in: [user._id, ...user.friends] },
     })
       .populate({
         path: "likes",

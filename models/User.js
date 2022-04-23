@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    family: {
+    friends: {
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       default: [],
     },

@@ -7,16 +7,17 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import UserCard from "../../components/userCard/UserCard";
 
 export default function Chats() {
-  const [family, setFamily] = useState([]);
+  const [friends, setFriends] = useState([]);
   let { user: auth } = useContext(Context);
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get(`/api/v1/users/family/${auth._id}`);
-      setFamily(res.data);
+      const res = await axios.get(`/api/v1/users/friends/${auth._id}`);
+      setFriends(res.data);
     };
     fetchPosts();
   }, [auth._id]);
+
   return (
     <>
       <Topbar />
@@ -28,8 +29,8 @@ export default function Chats() {
             <p> Start Chat Your Friends</p>
           </div>
           <div className="users">
-            {family.length > 0 &&
-              family.map((u) => <UserCard key={u.id} user={u} />)}
+            {friends.length > 0 &&
+              friends.map((u) => <UserCard key={u.id} user={u} />)}
           </div>
         </div>
       </div>

@@ -21,6 +21,9 @@
 
 .user-chat-card .container {
   padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .user-chat-card .btn {
   display: inline-block;
@@ -38,7 +41,7 @@
 .user-chat-card .btn-chat {
   color: #fff;
   background-color: #0080ff;
-  margin-right: 7px;
+  /* margin-right: 7px; */
 }
 
 .user-chat-card .btn-chat:hover {

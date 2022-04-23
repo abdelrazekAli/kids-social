@@ -38,7 +38,7 @@ exports.msgValidation = (data) => {
   const schema = Joi.object({
     conversationId: Joi.string().required(),
     sender: Joi.string().required(),
-    text: Joi.string().max(10000).required(),
+    content: Joi.string().required(),
   });
   return schema.validate(data).error;
 };
@@ -59,7 +59,7 @@ exports.checkUserId = async (id) => {
     if (ObjectId.isValid(id)) {
       let user = await User.findById(id)
         .populate({
-          path: "family",
+          path: "friends",
           select: "img username",
         })
         .populate({

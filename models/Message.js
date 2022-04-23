@@ -12,7 +12,7 @@ const MessageSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    text: {
+    content: {
       type: String,
       required: true,
     },

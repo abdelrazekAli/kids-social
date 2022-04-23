@@ -99,7 +99,7 @@ export default function Sidebar() {
               }}
             >
               <AddIcon className="sidebarIcon" />
-              <span className="sidebarListItemText">Invite Family</span>
+              <span className="sidebarListItemText">Invite Friend</span>
             </li>
             <li className="sidebarListItem" onClick={handleLogout}>
               <ExitToAppIcon className="sidebarIcon" />

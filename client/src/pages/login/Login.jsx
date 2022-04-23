@@ -36,7 +36,7 @@ export default function Login() {
   return (
     <div className="login-page">
       <div className="login-container">
-        <div className="login-icon">Family Social</div>
+        <div className="login-icon">Kids Social</div>
         <div className="login-form">
           <div className="login-title">Log In</div>
           <form onSubmit={handleForm}>

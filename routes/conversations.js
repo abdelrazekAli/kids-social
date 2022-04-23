@@ -48,7 +48,7 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-// get conv includes two userId
+// get conv of two users
 router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
   const { firstUserId, secondUserId } = req.params;
   try {

@@ -112,7 +112,7 @@ export default function Profile() {
             </div>
             {user._id !== profile._id && (
               <div className="btn-container">
-                {auth.family.find((u) => u._id === profile._id) ? (
+                {auth.friends.find((u) => u._id === profile._id) ? (
                   <button className="btn btn-red">Remove</button>
                 ) : auth.sentRequests.find((u) => u._id === profile._id) ? (
                   <button
@@ -157,7 +157,7 @@ export default function Profile() {
               </div>
             )}
             <div className="profileRightBottom">
-              <Rightbar user={true} userFamily={profile.family} />
+              <Rightbar user={true} userFriends={profile.friends} />
               <h4 className="rightbarTitle">Posts</h4>
               <Feed share={false} profile={userId} />
             </div>

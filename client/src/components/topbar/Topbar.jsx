@@ -6,7 +6,7 @@ export default function Topbar() {
     <div className="topbarContainer">
       <div>
         <Link to="/">
-          <span className="logo">Family Social</span>
+          <span className="logo">Kids Social</span>
         </Link>
       </div>
     </div>
