@@ -127,3 +127,7 @@ div + .rightbarTitle {
   display: flex;
   justify-content: center;
 }
+.no-online{
+  margin-top: 20px;
+  font-size: 20px;
+}

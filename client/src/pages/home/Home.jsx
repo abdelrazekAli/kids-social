@@ -11,7 +11,7 @@ export default function Home() {
       <div className="homeContainer">
         <Sidebar />
         <Feed share={true} />
-        <Rightbar />
+        <Rightbar home={true} />
       </div>
     </>
   );

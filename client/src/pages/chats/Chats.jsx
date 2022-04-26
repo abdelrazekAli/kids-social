@@ -30,7 +30,7 @@ export default function Chats() {
           </div>
           <div className="users">
             {friends.length > 0 &&
-              friends.map((u) => <UserCard key={u.id} user={u} />)}
+              friends.map((u) => <UserCard key={u._id} user={u} />)}
           </div>
         </div>
       </div>

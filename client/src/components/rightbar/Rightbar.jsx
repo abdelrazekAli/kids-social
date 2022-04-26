@@ -1,10 +1,18 @@
 import "./rightbar.css";
 import axios from "axios";
 import Online from "../online/Online";
+import Friend from "../friend/Friend";
 import { Context } from "../../context/Context";
 import { useState, useEffect, useContext } from "react";
 
-export default function Rightbar({ user, hideImg, userFriends }) {
+export default function Rightbar({
+  user,
+  home,
+  online,
+  hideImg,
+  userFriends,
+  onlineFriends,
+}) {
   const [friends, setFriends] = useState([]);
   let { user: auth } = useContext(Context);
 
@@ -16,6 +24,10 @@ export default function Rightbar({ user, hideImg, userFriends }) {
     fetchPosts();
   }, [auth._id]);
 
+  const onlineFriendsFilter = onlineFriends?.map((friend) =>
+    friends.find((f) => f._id === friend.userId)
+  );
+
   const HomeRightbar = () => {
     return (
       <>
@@ -25,7 +37,7 @@ export default function Rightbar({ user, hideImg, userFriends }) {
         <h4 className="rightbarTitle">Friends</h4>
         <div className=" rightbarFriendList">
           {friends.length > 0 &&
-            friends.map((u) => <Online key={u._id} user={u} />)}
+            friends.map((u) => <Friend key={u._id} user={u} />)}
         </div>
       </>
     );
@@ -40,7 +52,7 @@ export default function Rightbar({ user, hideImg, userFriends }) {
             <h4 className="rightbarTitle">friends</h4>
             <div className="rightbarFollowings">
               {userFriends.map((u) => (
-                <Online key={u._id} user={u} />
+                <Friend key={u._id} user={u} />
               ))}
             </div>
           </>
@@ -49,10 +61,32 @@ export default function Rightbar({ user, hideImg, userFriends }) {
     );
   };
 
+  const OnlineRightbar = () => {
+    return (
+      <>
+        <div className="btn-container"></div>
+        {onlineFriendsFilter?.length > 0 ? (
+          <>
+            <h4 className="rightbarTitle">Online friends</h4>
+            <div className="rightbarFollowings">
+              {onlineFriendsFilter?.map((u) => (
+                <Online key={u._id} user={u} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="no-online">There are no online friends</p>
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="rightbar">
       <div className="rightbarWrapper">
-        {user ? <ProfileRightbar /> : <HomeRightbar />}
+        {user && <ProfileRightbar />}
+        {home && <HomeRightbar />}
+        {online && <OnlineRightbar />}
       </div>
     </div>
   );

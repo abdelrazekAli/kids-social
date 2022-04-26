@@ -33,7 +33,7 @@ export default function PostDetails({ location }) {
             {post && <SinglePost post={post} liked={location.state.isLiked} />}
           </div>
         </div>
-        <Rightbar hideImg={false} />
+        <Rightbar hideImg={false} home={true} />
       </div>
     </>
   );

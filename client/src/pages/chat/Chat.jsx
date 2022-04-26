@@ -3,30 +3,107 @@ import "./chat.css";
 import axios from "axios";
 import { Send } from "@material-ui/icons";
 import { Link, useParams } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { CircularProgress } from "@material-ui/core";
+import { useContext, useEffect, useState, useRef } from "react";
+import { io } from "socket.io-client";
 
+import { Context } from "../../context/Context";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
-import Rightbar from "../../components/rightbar/Rightbar";
 import Message from "../../components/message/Message";
+import Rightbar from "../../components/rightbar/Rightbar";
 
-export default function Chat({ own }) {
-  let { friendId } = useParams();
+export default function Chat() {
+  const socket = useRef();
+  const messagesEndRef = useRef();
+  const { friendId } = useParams();
+  const { user } = useContext(Context);
   const [friend, setFriend] = useState();
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState();
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [conversation, setConversation] = useState(0);
 
+  // Get Friend data
   useEffect(() => {
-    const fetchFriend = async () => {
+    const fetchData = async () => {
       try {
-        // Get friend data
-        const res = await axios.get(`/api/v1/users/${friendId}`);
-        setFriend(res.data);
+        const res1 = await axios.get(`/api/v1/users/${friendId}`);
+        setFriend(res1.data);
       } catch (err) {
         console.log(err);
       }
     };
-    fetchFriend();
+    fetchData();
   }, [friendId]);
+
+  // Get Conversation
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res2 = await axios.get(
+          `/api/v1/conversations/find/${friendId}/${user._id}`
+        );
+        setConversation(res2.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [user, friendId]);
+
+  // Get Messages
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res3 = await axios.get(`/api/v1/messages/${conversation?._id}`);
+        setMessages(res3.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [conversation]);
+
+  useEffect(() => {
+    socket.current = io("ws://localhost:8900");
+  }, []);
+
+  useEffect(() => {
+    socket.current.emit("addUser", user._id);
+    socket.current.on("getUsers", (users) => {
+      setOnlineUsers(users.filter((u) => u.userId !== user._id));
+    });
+  }, [user]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  };
+  useEffect(scrollToBottom, [messages]);
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    if (newMessage) {
+      const msg = {
+        sender: user._id,
+        content: newMessage,
+        conversationId: conversation._id,
+      };
+      try {
+        await axios.post(`/api/v1/messages`, msg);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+      }
+      setNewMessage("");
+    }
+  };
 
   return (
     <>
@@ -34,21 +111,19 @@ export default function Chat({ own }) {
       <div className="chatContainer">
         <Sidebar />
         <div className="container-fluid my-1">
-          <input id="chat-id" type="hidden" value="<%= chatId %>" />
-          <input
-            id="friendId"
-            type="hidden"
-            name="friendId"
-            value="<%= friendData.id %>"
-          />
           <div className="row justify-content-center h-100">
+            {loading && (
+              <div className="loading">
+                <CircularProgress color="inherit" size="20px" />
+              </div>
+            )}
             <div className="col-md-8 col-xl-6 chat">
               <div className="card card-chat">
                 {friend && (
                   <div className="card-header msg_head">
                     <div className="d-flex bd-highlight">
                       <div className="img_cont">
-                        <Link to={`/chat/${friendId}`}>
+                        <Link to={`/profile/${friendId}`}>
                           <img
                             src={
                               friend.img
@@ -58,11 +133,20 @@ export default function Chat({ own }) {
                             className="rounded-circle user_img"
                             alt=""
                           />
+                          {onlineUsers.find((o) => o.userId === friendId) && (
+                            <div
+                              className="rightbarOnlineLg"
+                              title="Online now"
+                            />
+                          )}
                         </Link>
                       </div>
                       <div className="user_info">
                         <span>
-                          <Link to={`/chat/${friendId}`} className="pro-link">
+                          <Link
+                            to={`/profile/${friendId}`}
+                            className="pro-link"
+                          >
                             {friend.username}
                           </Link>
                         </span>
@@ -75,16 +159,10 @@ export default function Chat({ own }) {
                   </div>
                 )}
                 <div id="message-container" className="card-body msg_card_body">
-                  <Message
-                    msg={{ text: "Hi, How are you bro ?", date: "12:10 AM" }}
-                    own={true}
-                  />
-                  <Message
-                    msg={{
-                      text: "I'm good, What about you ?",
-                      date: "06:30 PM",
-                    }}
-                  />
+                  {messages.map((m) => (
+                    <Message key={m._id} msg={m} own={m.sender === user._id} />
+                  ))}
+                  <div ref={messagesEndRef} />
                 </div>
                 <div className="card-footer">
                   <div className="input-group">
@@ -94,23 +172,27 @@ export default function Chat({ own }) {
                       className="form-control type_msg textarea-bd"
                       placeholder="Write your message..."
                       maxLength="10000"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
                       autoFocus
                     ></textarea>
-                    <div
+                    <button
                       id="sendBtn"
-                      className="input-group-append  justify-content-end d-flex"
+                      className="input-group-append  justify-content-end d-flex send-btn"
+                      disabled={loading}
+                      onClick={(e) => sendMessage(e)}
                     >
                       <span className="input-group-text send_btn bg-white color-main">
                         <Send />
                       </span>
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <Rightbar hideImg={true} />
+        <Rightbar hideImg={true} online={true} onlineFriends={onlineUsers} />
       </div>
     </>
   );

@@ -1,8 +1,8 @@
-import "./online.css";
+import "./friend.css";
 import { Link } from "react-router-dom";
 
-export default function Online({ user }) {
-  const userImg = user?.img;
+export default function Friend({ user }) {
+  const userImg = user.img;
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   return (
@@ -14,7 +14,6 @@ export default function Online({ user }) {
             src={userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`}
             alt="userImg"
           />
-          <div className="rightbarOnline" title="Online now" />
         </div>
         <span className="rightbarUsername">{user?.username}</span>
       </li>

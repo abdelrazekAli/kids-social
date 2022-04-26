@@ -1,13 +1,13 @@
 import "./sidebar.css";
 import axios from "axios";
-import Online from "../online/Online";
+import Friend from "../friend/Friend";
 import { NavLink } from "react-router-dom";
 import { Search } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import { Context } from "../../context/Context";
 import { useState, useContext, useRef } from "react";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { Chat, Group, Person, Home } from "@material-ui/icons";
+import { Chat, Group, Person, Home, School } from "@material-ui/icons";
 
 export default function Sidebar() {
   const modal = useRef(null);
@@ -74,6 +74,12 @@ export default function Sidebar() {
                 <span className="sidebarListItemText">Home</span>
               </li>
             </NavLink>
+            <NavLink to="/" exact={true}>
+              <li className="sidebarListItem">
+                <School className="sidebarIcon " />
+                <span className="sidebarListItemText">Learning</span>
+              </li>
+            </NavLink>
             <NavLink to={`/profile/${user._id}`}>
               <li className="sidebarListItem">
                 <Person className="sidebarIcon" />
@@ -119,7 +125,7 @@ export default function Sidebar() {
             </div>
             <div className="mt-1">
               {users.length > 0 &&
-                users.map((u) => <Online key={u._id} user={u} />)}
+                users.map((u) => <Friend key={u._id} user={u} />)}
             </div>
           </div>
         </div>

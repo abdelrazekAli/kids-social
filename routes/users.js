@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const router = require("express").Router();
 const auth = require("./guards/auth.guard");
+const Conversation = require("../models/Conversation");
 const { userValidation, checkUserId } = require("../utils/validation");
 
 //get user
@@ -13,7 +14,6 @@ router.get("/:userId", async (req, res) => {
       ? res.status(400).send(result)
       : ({ password, updatedAt, ...others } = result._doc);
     res.status(200).json(others);
-    console.log(others);
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
@@ -193,6 +193,10 @@ router.put("/:id/accept", auth, async (req, res) => {
         ? res.status(400).send(result2)
         : (friend = result2);
 
+      const newConversation = new Conversation({
+        members: [userId, friendId],
+      });
+
       if (!friend.friends.find((u) => u._id == userId)) {
         await Promise.all([
           // Remove friend id from user sentRequests
@@ -203,6 +207,8 @@ router.put("/:id/accept", auth, async (req, res) => {
           friend.updateOne({ $push: { friends: userId } }),
           // Add friend id to user friends
           user.updateOne({ $push: { friends: friendId } }),
+          // Make a new conversation for them
+          newConversation.save(),
         ]);
         res.status(200).json("request has been accepted");
       } else {

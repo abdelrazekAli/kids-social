@@ -28,7 +28,7 @@ export default function Requests() {
           {requests.length > 0 &&
             requests.map((req) => <Request key={req._id} request={req} />)}
         </div>
-        <Rightbar />
+        <Rightbar home={true} />
       </div>
     </>
   );

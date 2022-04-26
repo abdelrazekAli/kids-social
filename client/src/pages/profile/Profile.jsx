@@ -1,6 +1,6 @@
 import "./profile.css";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Feed from "../../components/feed/Feed";
 import Topbar from "../../components/topbar/Topbar";
 import { CircularProgress } from "@material-ui/core";
@@ -89,6 +89,19 @@ export default function Profile() {
     window.location.reload();
   };
 
+  const unfriendHandler = async () => {
+    setLoading(true);
+    await axiosJWT({
+      method: "put",
+      url: `/api/v1/users/${profile._id}/delete`,
+      headers: {
+        "auth-token": user.accessToken,
+      },
+    });
+    setLoading(false);
+    window.location.reload();
+  };
+
   return (
     <>
       <Topbar />
@@ -113,7 +126,20 @@ export default function Profile() {
             {user._id !== profile._id && (
               <div className="btn-container">
                 {auth.friends.find((u) => u._id === profile._id) ? (
-                  <button className="btn btn-red">Remove</button>
+                  <>
+                    <button
+                      onClick={unfriendHandler}
+                      disabled={loading}
+                      className="btn btn-red"
+                    >
+                      Unfriend
+                    </button>
+                    <button disabled={loading} className="btn btn-confirm">
+                      <Link to={`/chat/${userId}`} className="color-light">
+                        Chat
+                      </Link>
+                    </button>
+                  </>
                 ) : auth.sentRequests.find((u) => u._id === profile._id) ? (
                   <button
                     onClick={cancelHandler}

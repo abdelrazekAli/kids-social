@@ -29,7 +29,9 @@ a {
 .color-main {
   color: #0080ff !important;
 }
-
+.color-light{
+  color: #fff !important;
+}
 .btn {
   display: inline-block;
   min-width: 5rem;
@@ -60,6 +62,7 @@ a {
 .btn-red {
   color: #fff;
   background-color: #dc3545;
+  margin-right: 7px;
 }
 .btn-red:hover {
   background-color: #bb2d3b;

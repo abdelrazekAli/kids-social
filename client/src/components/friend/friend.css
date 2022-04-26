@@ -20,7 +20,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background-color: #0ec067;
+  background-color: lime#0ec067;
   position: absolute;
   top: -2px;
   right: 0;
@@ -29,5 +29,4 @@
 
 .rightbarUsername {
   font-weight: 500;
-  font-size: 17px;
 }
