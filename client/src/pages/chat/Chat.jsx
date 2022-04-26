@@ -25,6 +25,7 @@ export default function Chat() {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [conversation, setConversation] = useState(0);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
 
   // Get Friend data
   useEffect(() => {
@@ -67,9 +68,23 @@ export default function Chat() {
     fetchData();
   }, [conversation]);
 
+  // Realtime Chat with Web Wocket
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        content: data.text,
+        createdAt: Date.now(),
+      });
+    });
   }, []);
+
+  useEffect(() => {
+    arrivalMessage &&
+      // currentChat?.members.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage]);
 
   useEffect(() => {
     socket.current.emit("addUser", user._id);
@@ -95,13 +110,21 @@ export default function Chat() {
         content: newMessage,
         conversationId: conversation._id,
       };
+
+      socket.current.emit("sendMessage", {
+        senderId: user._id,
+        receiverId: friendId,
+        text: newMessage,
+      });
+
       try {
-        await axios.post(`/api/v1/messages`, msg);
+        const res = await axios.post(`/api/v1/messages`, msg);
+        setMessages([...messages, res.data]);
         setLoading(false);
+        setNewMessage("");
       } catch (err) {
         console.log(err);
       }
-      setNewMessage("");
     }
   };
 
