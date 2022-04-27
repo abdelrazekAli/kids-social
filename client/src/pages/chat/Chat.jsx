@@ -1,11 +1,13 @@
 import "./chat.css";
 
 import axios from "axios";
-import { Send } from "@material-ui/icons";
-import { Link, useParams } from "react-router-dom";
-import { CircularProgress } from "@material-ui/core";
-import { useContext, useEffect, useState, useRef } from "react";
+import Peer from "simple-peer";
 import { io } from "socket.io-client";
+import Button from "@material-ui/core/Button";
+import { Link, useParams } from "react-router-dom";
+import { Send, Videocam } from "@material-ui/icons";
+import { useContext, useEffect, useState, useRef } from "react";
+import { CircularProgress, IconButton } from "@material-ui/core";
 
 import { Context } from "../../context/Context";
 import Topbar from "../../components/topbar/Topbar";
@@ -26,6 +28,18 @@ export default function Chat() {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [conversation, setConversation] = useState(0);
   const [arrivalMessage, setArrivalMessage] = useState(null);
+
+  // Video call
+  const myVideo = useRef();
+  const userVideo = useRef();
+  const connectionRef = useRef();
+  const [stream, setStream] = useState();
+  const [callStarted, setCallStarted] = useState(false);
+  const [streamStarted, setStreamStarted] = useState(false);
+  const [callEnded, setCallEnded] = useState(false);
+  const [callerSignal, setCallerSignal] = useState();
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [receivingCall, setReceivingCall] = useState(false);
 
   // Get Friend data
   useEffect(() => {
@@ -71,6 +85,7 @@ export default function Chat() {
   // Realtime Chat with Web Wocket
   useEffect(() => {
     socket.current = io("ws://localhost:8900");
+
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -78,12 +93,27 @@ export default function Chat() {
         createdAt: Date.now(),
       });
     });
+
+    socket.current.on("callUser", ({ signal }) => {
+      setReceivingCall(true);
+      setCallerSignal(signal);
+    });
   }, []);
 
+  // Get user camera and audio
   useEffect(() => {
-    arrivalMessage &&
-      // currentChat?.members.includes(arrivalMessage.sender) &&
-      setMessages((prev) => [...prev, arrivalMessage]);
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        setStream(stream);
+        if (streamStarted) {
+          myVideo.current.srcObject = stream;
+        }
+      });
+  }, [streamStarted]);
+
+  useEffect(() => {
+    arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage]);
 
   useEffect(() => {
@@ -93,14 +123,7 @@ export default function Chat() {
     });
   }, [user]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-    });
-  };
-  useEffect(scrollToBottom, [messages]);
-
+  // Send message
   const sendMessage = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -128,6 +151,77 @@ export default function Chat() {
     }
   };
 
+  // Start video call
+  const callUser = () => {
+    setCallStarted(true);
+    setStreamStarted(true);
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: stream,
+    });
+
+    peer.on("signal", (data) => {
+      socket.current.emit("callUser", {
+        userToCall: friendId,
+        signal: data,
+        from: user._id,
+        name: friend.username,
+      });
+    });
+
+    peer.on("stream", (stream) => {
+      userVideo.current.srcObject = stream;
+    });
+
+    socket.current.on("callAccepted", (signal) => {
+      setCallAccepted(true);
+      peer.signal(signal);
+    });
+
+    connectionRef.current = peer;
+  };
+
+  // Answer video call
+  const answerCall = () => {
+    setStreamStarted(true);
+    setCallStarted(true);
+    setCallAccepted(true);
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream,
+    });
+
+    peer.on("signal", (data) => {
+      socket.current.emit("answerCall", { signal: data, to: friendId });
+    });
+
+    peer.on("stream", (stream) => {
+      userVideo.current.srcObject = stream;
+    });
+
+    peer.signal(callerSignal);
+    connectionRef.current = peer;
+  };
+
+  // Leave video call
+  const leaveCall = () => {
+    setCallEnded(true);
+    setCallStarted(false);
+    setStreamStarted(false);
+    connectionRef.current.destroy();
+  };
+
+  // Scroll to last message
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  };
+  useEffect(scrollToBottom, [messages]);
+
   return (
     <>
       <Topbar />
@@ -141,6 +235,59 @@ export default function Chat() {
               </div>
             )}
             <div className="col-md-8 col-xl-6 chat">
+              {/* Video call */}
+              <div className="video-container">
+                {callStarted && (
+                  <h4 className="text-center h4-fs">
+                    You're calling {friend.username}
+                  </h4>
+                )}
+                {receivingCall && !callAccepted ? (
+                  <div className="caller">
+                    <h4 className="text-center h4-fs">
+                      {friend.username} is calling...
+                    </h4>
+                    <Button
+                      variant="contained"
+                      className="bg-green m-1"
+                      onClick={answerCall}
+                    >
+                      Answer
+                    </Button>
+                  </div>
+                ) : null}
+                <div className="video">
+                  {callAccepted && !callEnded ? (
+                    <video
+                      playsInline
+                      ref={userVideo}
+                      autoPlay
+                      style={{ width: "600px" }}
+                    />
+                  ) : null}
+                </div>
+                {streamStarted && (
+                  <video
+                    playsInline
+                    muted
+                    ref={myVideo}
+                    autoPlay
+                    style={{ width: "200px" }}
+                    className="user-video"
+                  />
+                )}
+                {callStarted && !callEnded ? (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className="end-btn"
+                    onClick={leaveCall}
+                  >
+                    End Call
+                  </Button>
+                ) : null}
+              </div>
+              {/* /Video call */}
               <div className="card card-chat">
                 {friend && (
                   <div className="card-header msg_head">
@@ -175,10 +322,15 @@ export default function Chat() {
                         </span>
                         <p>Private chat</p>
                       </div>
+                      <IconButton
+                        className="color-blue"
+                        title="Start a Video call"
+                        aria-label="call"
+                        onClick={callUser}
+                      >
+                        <Videocam fontSize="large" className="color-blue" />
+                      </IconButton>
                     </div>
-                    <span id="action_menu_btn">
-                      <i className="fa fa-ellipsis-v"></i>
-                    </span>
                   </div>
                 )}
                 <div id="message-container" className="card-body msg_card_body">

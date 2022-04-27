@@ -32,10 +32,28 @@ io.on("connection", (socket) => {
   //send and get message
   socket.on("sendMessage", ({ senderId, receiverId, text }) => {
     const user = getUser(receiverId);
-    io.to(user.socketId).emit("getMessage", {
+    io.to(user?.socketId).emit("getMessage", {
       senderId,
       text,
     });
+  });
+
+  //when user call
+  socket.on("callUser", ({ userToCall, signal, from, name }) => {
+    const user = getUser(userToCall);
+
+    io.to(user?.socketId).emit("callUser", {
+      signal,
+      from,
+      name,
+    });
+  });
+
+  //when answer call
+  socket.on("answerCall", (data) => {
+    const user = getUser(data.to);
+
+    io.to(user?.socketId).emit("callAccepted", data.signal);
   });
 
   //when disconnect
@@ -43,5 +61,6 @@ io.on("connection", (socket) => {
     console.log("a user disconnected!");
     removeUser(socket.id);
     io.emit("getUsers", users);
+    socket.broadcast.emit("callEnded");
   });
 });

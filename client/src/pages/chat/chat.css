@@ -463,3 +463,26 @@ textarea.form-control {
   right: 0;
   border: 2px solid white;
 }
+.color-blue{
+  color:#2196f3
+}
+.chatContainer .video-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.chatContainer video{
+  border-radius: 10px;
+}
+.chatContainer .user-video{
+  margin-right: 10%;
+  align-self: flex-end;
+}
+.chatContainer .end-btn{
+  margin: 1rem;
+}
+.chatContainer .caller{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
