@@ -40,7 +40,7 @@
 }
 .user-chat-card .btn-chat {
   color: #fff;
-  background-color: #0080ff;
+  background-color: var(--main-color);
   /* margin-right: 7px; */
 }
 

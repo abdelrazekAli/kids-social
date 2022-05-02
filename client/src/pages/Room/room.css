@@ -1,0 +1,29 @@
+.room-container {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.room-container h4 {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 500;
+  margin: 1.5rem 0 1.5rem 0;
+}
+.room-container .videos {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+.room-container .user-video {
+  width: 50%;
+}
+
+.room-container video {
+  border-radius: 7px;
+}

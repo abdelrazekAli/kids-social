@@ -1,15 +1,16 @@
 import "./chat.css";
 
 import axios from "axios";
-import Peer from "simple-peer";
+import { v1 as uuid } from "uuid";
 import { io } from "socket.io-client";
 import Button from "@material-ui/core/Button";
+import { Context } from "../../context/Context";
 import { Link, useParams } from "react-router-dom";
-import { Send, Videocam } from "@material-ui/icons";
+import { Send, Videocam, Phone } from "@material-ui/icons";
 import { useContext, useEffect, useState, useRef } from "react";
 import { CircularProgress, IconButton } from "@material-ui/core";
 
-import { Context } from "../../context/Context";
+// Import components
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Message from "../../components/message/Message";
@@ -17,29 +18,24 @@ import Rightbar from "../../components/rightbar/Rightbar";
 
 export default function Chat() {
   const socket = useRef();
-  const messagesEndRef = useRef();
   const { friendId } = useParams();
   const { user } = useContext(Context);
   const [friend, setFriend] = useState();
-  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newMessage, setNewMessage] = useState();
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [onlineUsers, setOnlineUsers] = useState([]);
+
+  // Messages
+  const messagesEndRef = useRef();
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState();
   const [conversation, setConversation] = useState(0);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
-  // Video call
-  const myVideo = useRef();
-  const userVideo = useRef();
-  const connectionRef = useRef();
-  const [stream, setStream] = useState();
-  const [callStarted, setCallStarted] = useState(false);
-  const [streamStarted, setStreamStarted] = useState(false);
-  const [callEnded, setCallEnded] = useState(false);
-  const [callerSignal, setCallerSignal] = useState();
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [receivingCall, setReceivingCall] = useState(false);
+  // Call
+  const [callId, setCallId] = useState(uuid());
+  const [callType, setCallType] = useState("");
+  const [offerCall, setOfferCall] = useState(false);
 
   // Get Friend data
   useEffect(() => {
@@ -93,29 +89,24 @@ export default function Chat() {
         createdAt: Date.now(),
       });
     });
-
-    socket.current.on("callUser", ({ signal }) => {
-      setReceivingCall(true);
-      setCallerSignal(signal);
-    });
   }, []);
 
-  // Get user camera and audio
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        if (streamStarted) {
-          myVideo.current.srcObject = stream;
-        }
-      });
-  }, [streamStarted]);
-
+  // Set new messages
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage]);
 
+  // Offer call
+  useEffect(() => {
+    socket.current.on("offering call", (data) => {
+      console.log(data);
+      setOfferCall(true);
+      setCallType(data.callType);
+      setCallId(data.callId);
+    });
+  }, []);
+
+  // Get online friends
   useEffect(() => {
     socket.current.emit("addUser", user._id);
     socket.current.on("getUsers", (users) => {
@@ -151,66 +142,33 @@ export default function Chat() {
     }
   };
 
-  // Start video call
-  const callUser = () => {
-    setCallStarted(true);
-    setStreamStarted(true);
-    const peer = new Peer({
-      initiator: true,
-      trickle: false,
-      stream: stream,
-    });
-
-    peer.on("signal", (data) => {
-      socket.current.emit("callUser", {
-        userToCall: friendId,
-        signal: data,
-        from: user._id,
-        name: friend.username,
-      });
-    });
-
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
-
-    socket.current.on("callAccepted", (signal) => {
-      setCallAccepted(true);
-      peer.signal(signal);
-    });
-
-    connectionRef.current = peer;
+  // Call user
+  const callUser = (type) => {
+    socket.current.emit("offering call", { friendId, callType: type, callId });
   };
 
-  // Answer video call
+  // Answer call
   const answerCall = () => {
-    setStreamStarted(true);
-    setCallStarted(true);
-    setCallAccepted(true);
-    const peer = new Peer({
-      initiator: false,
-      trickle: false,
-      stream,
-    });
+    console.log(callType);
+    let url;
+    callType === "video"
+      ? (url = `/room/video/${callId}`)
+      : (url = `/room/voice/${callId}`);
 
-    peer.on("signal", (data) => {
-      socket.current.emit("answerCall", { signal: data, to: friendId });
-    });
+    // Open room url in new tab
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    if (newWindow) newWindow.opener = null;
 
-    peer.on("stream", (stream) => {
-      userVideo.current.srcObject = stream;
-    });
-
-    peer.signal(callerSignal);
-    connectionRef.current = peer;
+    // Reset states
+    setOfferCall(false);
+    setCallType("");
+    setCallId(uuid());
   };
 
-  // Leave video call
-  const leaveCall = () => {
-    setCallEnded(true);
-    setCallStarted(false);
-    setStreamStarted(false);
-    connectionRef.current.destroy();
+  // Cancel call
+  const cancelCall = () => {
+    setOfferCall(false);
+    socket.current.emit("canceling call", user.username);
   };
 
   // Scroll to last message
@@ -235,59 +193,32 @@ export default function Chat() {
               </div>
             )}
             <div className="col-md-8 col-xl-6 chat">
-              {/* Video call */}
-              <div className="video-container">
-                {callStarted && (
-                  <h4 className="text-center h4-fs">
-                    You're calling {friend.username}
-                  </h4>
-                )}
-                {receivingCall && !callAccepted ? (
-                  <div className="caller">
+              {offerCall && (
+                <div className="caller">
+                  <div className="content">
                     <h4 className="text-center h4-fs">
                       {friend.username} is calling...
                     </h4>
-                    <Button
-                      variant="contained"
-                      className="bg-green m-1"
-                      onClick={answerCall}
-                    >
-                      Answer
-                    </Button>
+                    <div className="call-btns">
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className="end-btn"
+                        onClick={cancelCall}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="contained"
+                        className="bg-green m-1"
+                        onClick={answerCall}
+                      >
+                        Answer
+                      </Button>
+                    </div>
                   </div>
-                ) : null}
-                <div className="video">
-                  {callAccepted && !callEnded ? (
-                    <video
-                      playsInline
-                      ref={userVideo}
-                      autoPlay
-                      style={{ width: "600px" }}
-                    />
-                  ) : null}
                 </div>
-                {streamStarted && (
-                  <video
-                    playsInline
-                    muted
-                    ref={myVideo}
-                    autoPlay
-                    style={{ width: "200px" }}
-                    className="user-video"
-                  />
-                )}
-                {callStarted && !callEnded ? (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    className="end-btn"
-                    onClick={leaveCall}
-                  >
-                    End Call
-                  </Button>
-                ) : null}
-              </div>
-              {/* /Video call */}
+              )}
               <div className="card card-chat">
                 {friend && (
                   <div className="card-header msg_head">
@@ -322,14 +253,32 @@ export default function Chat() {
                         </span>
                         <p>Private chat</p>
                       </div>
-                      <IconButton
-                        className="color-blue"
-                        title="Start a Video call"
-                        aria-label="call"
-                        onClick={callUser}
-                      >
-                        <Videocam fontSize="large" className="color-blue" />
-                      </IconButton>
+                      <div className="call-btns ml-1">
+                        <Link to={`/room/voice/${callId}`} target="_blank">
+                          <IconButton
+                            className="color-blue f-start"
+                            title="Start a Voice call"
+                            aria-label="call"
+                            onClick={() => {
+                              callUser("voice");
+                            }}
+                          >
+                            <Phone className="color-blue fs-2" />
+                          </IconButton>
+                        </Link>
+                        <Link to={`/room/video/${callId}`} target="_blank">
+                          <IconButton
+                            className="color-blue f-start"
+                            title="Start a Video call"
+                            aria-label="call"
+                            onClick={() => {
+                              callUser("video");
+                            }}
+                          >
+                            <Videocam className="color-blue fs-2" />
+                          </IconButton>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 )}

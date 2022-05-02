@@ -74,7 +74,7 @@ export default function Sidebar() {
                 <span className="sidebarListItemText">Home</span>
               </li>
             </NavLink>
-            <NavLink to="/" exact={true}>
+            <NavLink to="/learning" exact={true}>
               <li className="sidebarListItem">
                 <School className="sidebarIcon " />
                 <span className="sidebarListItemText">Learning</span>

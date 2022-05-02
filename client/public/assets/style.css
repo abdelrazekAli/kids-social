@@ -1,3 +1,6 @@
+:root {
+  --main-color: #0080ff;
+}
 * {
   margin: 0;
   font-family: "Roboto", sans-serif;
@@ -10,7 +13,7 @@ a {
   text-decoration: none;
   color: #212529;
 }
-.m-1{
+.m-1 {
   margin: 1rem !important;
 }
 .mb-1 {
@@ -29,10 +32,19 @@ a {
 .mt-2 {
   margin-top: 2rem;
 }
-.color-main {
-  color: #0080ff !important;
+.ml-1 {
+  margin-left: 1rem;
 }
-.color-light{
+.mb-1 {
+  margin-bottom: 1rem !important;
+}
+.fs-25 {
+  font-size: 25px;
+}
+.color-main {
+  color: var(--main-color) !important;
+}
+.color-light {
   color: #fff !important;
 }
 .btn {
@@ -49,7 +61,7 @@ a {
 }
 .btn-confirm {
   color: #fff;
-  background-color: #0080ff;
+  background-color: var(--main-color);
   margin-right: 7px;
 }
 .btn-confirm:hover {
@@ -71,16 +83,24 @@ a {
   background-color: #bb2d3b;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
 
-.h4-fs{
+.h4-fs {
   font-size: 22px;
   font-weight: 500;
-
 }
-.bg-green{
+.bg-green {
   color: #fff !important;
   background-color: #28a745 !important;
+}
+.f-start {
+  align-self: flex-start;
+}
+.fs-2 {
+  font-size: 2rem !important;
+}
+.text-cap {
+  text-transform: capitalize;
 }

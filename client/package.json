@@ -17,6 +17,7 @@
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.4.1",
     "timeago.js": "^4.0.2",
+    "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

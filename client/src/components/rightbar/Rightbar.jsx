@@ -24,7 +24,7 @@ export default function Rightbar({
     fetchPosts();
   }, [auth._id]);
 
-  const onlineFriendsFilter = onlineFriends?.map((friend) =>
+  const filterFriends = onlineFriends?.map((friend) =>
     friends.find((f) => f._id === friend.userId)
   );
 
@@ -65,11 +65,11 @@ export default function Rightbar({
     return (
       <>
         <div className="btn-container"></div>
-        {onlineFriendsFilter?.length > 0 ? (
+        {filterFriends?.length > 0 ? (
           <>
             <h4 className="rightbarTitle">Online friends</h4>
             <div className="rightbarFollowings">
-              {onlineFriendsFilter?.map((u) => (
+              {filterFriends?.map((u) => (
                 <Online key={u?._id} user={u} />
               ))}
             </div>

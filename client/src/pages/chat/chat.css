@@ -369,7 +369,6 @@ textarea[name="msg-input"] {
   width: 100%;
 }
 
-
 .container-fluid {
   width: 60%;
   padding-right: var(--bs-gutter-x, 0.75rem);
@@ -378,8 +377,8 @@ textarea[name="msg-input"] {
   margin-left: auto;
   margin-right: 1rem;
 }
-@media (max-width: 769px){
-  .container-fluid{
+@media (max-width: 769px) {
+  .container-fluid {
     width: 100%;
   }
 }
@@ -446,11 +445,11 @@ textarea.form-control {
   border-radius: 0.25rem;
 }
 
-.send-btn{
-    border: none;
-    background: #fff;
-    align-items: center;
-    border-radius: 0px 15px 15px 0px;
+.send-btn {
+  border: none;
+  background: #fff;
+  align-items: center;
+  border-radius: 0px 15px 15px 0px;
 }
 /* /Messages container */
 .rightbarOnlineLg {
@@ -463,26 +462,33 @@ textarea.form-control {
   right: 0;
   border: 2px solid white;
 }
-.color-blue{
-  color:#2196f3
+.color-blue {
+  color: #2196f3;
 }
-.chatContainer .video-container{
+.chatContainer .video-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.chatContainer video{
+.chatContainer video {
   border-radius: 10px;
 }
-.chatContainer .user-video{
+.chatContainer .user-video {
   margin-right: 10%;
   align-self: flex-end;
 }
-.chatContainer .end-btn{
+.chatContainer .end-btn {
   margin: 1rem;
 }
-.chatContainer .caller{
+.chatContainer .caller {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+.chatContainer .caller .content {
+  border: 1px solid #dfdfdf;
+  border-radius: 7px;
+  padding: 20px 20px 10px;
+  background: whitesmoke;
+  margin-bottom: 1rem;
 }

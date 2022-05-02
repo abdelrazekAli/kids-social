@@ -106,7 +106,7 @@ div + .rightbarTitle {
 .rightbarFollowButton {
   margin-bottom: 10px;
   border: none;
-  background-color: #0080ff;
+  background-color: var(--main-color);
   color: white;
   border-radius: 5px;
   padding: 5px 10px;
@@ -127,7 +127,7 @@ div + .rightbarTitle {
   display: flex;
   justify-content: center;
 }
-.no-online{
+.no-online {
   margin-top: 20px;
   font-size: 20px;
 }

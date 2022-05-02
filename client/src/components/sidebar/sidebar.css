@@ -34,7 +34,7 @@
 }
 .sidebarListItem:hover,
 .sidebarListItem:active {
-  color: #0080ff;
+  color: var(--main-color);
 }
 .sidebarIcon {
   margin-right: 15px;
@@ -82,7 +82,7 @@
 }
 
 .active {
-  color: #0080ff;
+  color: var(--main-color);
 }
 .d-block {
   display: block !important;

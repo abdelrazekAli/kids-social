@@ -10,6 +10,7 @@ import {
 // Import pages
 import Home from "./pages/home/Home";
 import Chat from "./pages/chat/Chat";
+import Room from "./pages/Room/Room";
 import Chats from "./pages/chats/Chats";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
@@ -25,7 +26,6 @@ function App() {
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
-
         {user ? (
           <>
             <Route exact path="/" component={Home} />
@@ -34,6 +34,7 @@ function App() {
             <Route path="/requests" component={Requests} />
             <Route path="/chats" component={Chats} />
             <Route path="/chat/:friendId" component={Chat} />
+            <Route path="/room/:type/:roomID" component={Room} />
           </>
         ) : (
           <>
@@ -43,6 +44,9 @@ function App() {
             <Redirect from="/requests" to="/login" />
             <Redirect from="/chats" to="/login" />
             <Redirect from="/chat/:userId" to="/login" />
+            <Redirect from="/room/:type/:roomID" to="/login" />
+            <Redirect from="/learning" to="/login" />
+            <Redirect from="/learning/:category" to="/login" />
           </>
         )}
       </Switch>
