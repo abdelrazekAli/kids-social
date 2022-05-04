@@ -141,7 +141,7 @@ export default function Sidebar() {
               >
                 &times;
               </span>
-              <h3>Invite Your Family</h3>
+              <h3>Invite Your Friends</h3>
               <form className="invite-form">
                 <input
                   className="invite-input"

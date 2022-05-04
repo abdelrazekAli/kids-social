@@ -14,9 +14,11 @@ import Room from "./pages/Room/Room";
 import Chats from "./pages/chats/Chats";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
+import Learning from "./pages/learning/Learning";
 import Register from "./pages/register/Register";
 import Requests from "./pages/requests/Requests";
 import PostDetails from "./pages/postDetails/PostDetails";
+import LearningCategory from "./pages/learningCategory/LearningCategory";
 
 function App() {
   const { user } = useContext(Context);
@@ -35,6 +37,8 @@ function App() {
             <Route path="/chats" component={Chats} />
             <Route path="/chat/:friendId" component={Chat} />
             <Route path="/room/:type/:roomID" component={Room} />
+            <Route path="/learning" component={Learning} exact />
+            <Route path="/learning/:category" component={LearningCategory} />
           </>
         ) : (
           <>
