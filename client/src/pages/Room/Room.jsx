@@ -14,7 +14,7 @@ const videoConstraints = {
   width: window.innerWidth / 2,
 };
 
-const Room = () => {
+export default function Room() {
   const socketRef = useRef();
   const userVideo = useRef();
   const peersRef = useRef([]);
@@ -157,6 +157,4 @@ const Room = () => {
       </div>
     </>
   );
-};
-
-export default Room;
+}

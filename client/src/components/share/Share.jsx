@@ -8,6 +8,7 @@ import { PermMedia, Cancel } from "@material-ui/icons";
 export default function Share() {
   const desc = useRef();
   const { user } = useContext(Context);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -54,8 +55,8 @@ export default function Share() {
         <div className="shareTop">
           <img
             className="shareProfileImg"
-            src={"/assets/person/noAvatar.png"}
-            alt=""
+            src={user.img ? `${PF}${user.img}` : `/assets/person/noAvatar.png`}
+            alt="userImg"
           />
           <input placeholder="Write a post" className="shareInput" ref={desc} />
         </div>

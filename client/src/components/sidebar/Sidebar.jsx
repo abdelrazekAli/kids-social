@@ -2,7 +2,7 @@ import "./sidebar.css";
 import axios from "axios";
 import Friend from "../friend/Friend";
 import { NavLink } from "react-router-dom";
-import { Search } from "@material-ui/icons";
+import { Search, Settings } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import { Context } from "../../context/Context";
 import { useState, useContext, useRef } from "react";
@@ -96,6 +96,12 @@ export default function Sidebar() {
               <li className="sidebarListItem">
                 <Chat className="sidebarIcon" />
                 <span className="sidebarListItemText">Chats</span>
+              </li>
+            </NavLink>
+            <NavLink to="/settings">
+              <li className="sidebarListItem">
+                <Settings className="sidebarIcon" />
+                <span className="sidebarListItemText">Settings</span>
               </li>
             </NavLink>
             <li

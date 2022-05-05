@@ -12,6 +12,7 @@ exports.userValidation = (data) => {
     email: Joi.string().email(),
     password: Joi.string().min(3).max(255),
     userId: Joi.string(),
+    img: Joi.string(),
   });
   return schema.validate(data).error;
 };

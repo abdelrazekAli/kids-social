@@ -78,6 +78,8 @@ router.post("/login", async (req, res) => {
     res.header("auth-token", accessToken).json({
       _id: user._id,
       username: user.username,
+      email: user.email,
+      img: user.img,
       accessToken: accessToken,
       refreshToken: refreshToken,
     });

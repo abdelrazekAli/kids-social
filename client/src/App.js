@@ -14,6 +14,7 @@ import Room from "./pages/Room/Room";
 import Chats from "./pages/chats/Chats";
 import Login from "./pages/login/Login";
 import Profile from "./pages/profile/Profile";
+import Settings from "./pages/settings/Settings";
 import Learning from "./pages/learning/Learning";
 import Register from "./pages/register/Register";
 import Requests from "./pages/requests/Requests";
@@ -31,13 +32,14 @@ function App() {
         {user ? (
           <>
             <Route exact path="/" component={Home} />
-            <Route path="/profile/:userId" component={Profile} />
-            <Route path="/posts/:postId" component={PostDetails} />
-            <Route path="/requests" component={Requests} />
             <Route path="/chats" component={Chats} />
+            <Route path="/requests" component={Requests} />
+            <Route path="/settings" component={Settings} />
             <Route path="/chat/:friendId" component={Chat} />
+            <Route path="/profile/:userId" component={Profile} />
             <Route path="/room/:type/:roomID" component={Room} />
-            <Route path="/learning" component={Learning} exact />
+            <Route path="/posts/:postId" component={PostDetails} />
+            <Route exact path="/learning" component={Learning} />
             <Route path="/learning/:category" component={LearningCategory} />
           </>
         ) : (

@@ -1,6 +1,9 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Token = require("../models/Token");
 const router = require("express").Router();
 const auth = require("./guards/auth.guard");
+const generateAccessToken = require("../utils/token");
 const Conversation = require("../models/Conversation");
 const { userValidation, checkUserId } = require("../utils/validation");
 
@@ -43,11 +46,38 @@ router.put("/:id", auth, async (req, res) => {
       if (validationResult)
         return res.status(400).send(validationResult.details[0].message);
 
-      await User.findByIdAndUpdate(req.params.id, {
-        $set: req.body,
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: req.body,
+        },
+        { new: true }
+      );
+
+      // Create and assign a token
+      let accessToken = generateAccessToken({ _id: req.params.id });
+      let refreshToken = jwt.sign(
+        { _id: req.params.id },
+        process.env.JWT_TOKEN_SECRET
+      );
+
+      // Save refresh token to database
+      let newToken = new Token({
+        token: refreshToken,
       });
-      res.status(200).json("Account has been updated");
+      await newToken.save();
+
+      const { password, friendRequests, sentRequests, __v, ...others } =
+        updatedUser._doc;
+      res.header("auth-token", accessToken).json({
+        ...others,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      });
+
+      res.status(200).json(others);
     } catch (err) {
+      console.log(err);
       return res.status(500).json(err);
     }
   } else {
