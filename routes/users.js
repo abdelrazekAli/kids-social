@@ -46,8 +46,15 @@ router.put("/:id", auth, async (req, res) => {
       if (validationResult)
         return res.status(400).send(validationResult.details[0].message);
 
+      // Check email
+      let user = await User.findById(userId);
+      if (user.email !== req.body.email) {
+        let emailCheck = await User.findOne({ email: req.body.email });
+        if (emailCheck) return res.status(409).json("Email is already used");
+      }
+
       const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
+        userId,
         {
           $set: req.body,
         },
@@ -55,9 +62,9 @@ router.put("/:id", auth, async (req, res) => {
       );
 
       // Create and assign a token
-      let accessToken = generateAccessToken({ _id: req.params.id });
+      let accessToken = generateAccessToken({ _id: userId });
       let refreshToken = jwt.sign(
-        { _id: req.params.id },
+        { _id: userId },
         process.env.JWT_TOKEN_SECRET
       );
 

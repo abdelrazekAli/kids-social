@@ -56,14 +56,14 @@ export default function Register() {
         <form onSubmit={handleForm}>
           <input
             className="login-input"
-            placeholder="Full Name"
+            placeholder="Name"
             type="text"
             required
             ref={username}
           />
           <input
             className="login-input"
-            placeholder="Email Address"
+            placeholder="Email"
             type="email"
             required
             ref={email}

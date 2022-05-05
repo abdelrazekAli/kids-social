@@ -89,7 +89,7 @@ a {
 
 .h4-fs {
   font-size: 22px;
-  font-weight: 500;
+  font-weight: 400;
 }
 .bg-green {
   color: #fff !important;
@@ -103,4 +103,10 @@ a {
 }
 .text-cap {
   text-transform: capitalize;
+}
+.color-green {
+  color: #28a745;
+}
+.p-relative {
+  position: relative;
 }

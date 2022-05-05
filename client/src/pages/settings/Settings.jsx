@@ -2,6 +2,8 @@ import "./settings.css";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { Context, axiosJWT } from "../../context/Context";
+import { CircularProgress } from "@material-ui/core";
+import { Edit } from "@material-ui/icons";
 
 // Import components
 import Topbar from "../../components/topbar/Topbar";
@@ -13,10 +15,16 @@ export default function Settings() {
   const [username, setUsername] = useState(user?.username);
   const [file, setFile] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({
+    isError: false,
+    msg: "",
+  });
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     dispatch({ type: "UPDATE_START" });
     const updatedUser = {
@@ -33,6 +41,8 @@ export default function Settings() {
         await axios.post("/api/v1/upload", data);
       } catch (err) {
         dispatch({ type: "UPDATE_FAILURE" });
+        setLoading(false);
+        setSuccess(false);
       }
     }
     try {
@@ -44,10 +54,18 @@ export default function Settings() {
         },
         data: updatedUser,
       });
+      setLoading(false);
       setSuccess(true);
       dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
     } catch (err) {
+      setLoading(false);
+      setSuccess(false);
       dispatch({ type: "UPDATE_FAILURE" });
+      if (err.response.status === 409) {
+        setError({ isError: true, msg: "Email is already used" });
+      } else {
+        setError({ isError: true, msg: "Somthing went wrong!" });
+      }
     }
   };
   return (
@@ -56,13 +74,15 @@ export default function Settings() {
       <div className="settingsContainer">
         <Sidebar />
         <div className="settingsWrapper">
-          <div className="settingsTitle">
-            <span className="settingsUpdateTitle">Update Your Account</span>
-          </div>
+          {loading && (
+            <div className="loading">
+              <CircularProgress color="inherit" size="20px" />
+            </div>
+          )}
           <form className="settingsForm" onSubmit={handleSubmit}>
-            <label>Profile Picture</label>
             <div className="settingsPP">
               <img
+                className=""
                 src={
                   file
                     ? URL.createObjectURL(file)
@@ -73,11 +93,14 @@ export default function Settings() {
                 alt=""
               />
               <label htmlFor="fileInput">
-                <i className="settingsPPIcon far fa-user-circle"></i>
+                <span className="settingsPPIcon ">
+                  <Edit className="color-green edit-icon" />
+                </span>
               </label>
               <input
                 type="file"
                 id="fileInput"
+                accept=".png,.jpeg,.jpg"
                 style={{ display: "none" }}
                 onChange={(e) => setFile(e.target.files[0])}
               />
@@ -85,6 +108,8 @@ export default function Settings() {
             <label>Name</label>
             <input
               type="text"
+              minLength={3}
+              maxLength={20}
               placeholder={user.username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -94,20 +119,19 @@ export default function Settings() {
               placeholder={user.email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <button className="settingsSubmit" type="submit">
-              Update
-            </button>
-            {success && (
-              <span
-                style={{
-                  color: "green",
-                  textAlign: "center",
-                  marginTop: "20px",
-                }}
+            <div className="btn-container">
+              <button
+                disabled={loading}
+                type="submit"
+                className="btn btn-confirm settingsSubmit"
               >
-                Profile has been updated...
-              </span>
+                Update
+              </button>
+            </div>
+            {success && (
+              <span className="text-success">Profile has been updated.</span>
             )}
+            {error.isError && <div>{error.msg}</div>}
           </form>
         </div>
       </div>

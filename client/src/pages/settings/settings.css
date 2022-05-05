@@ -17,13 +17,6 @@
 .settingsUpdateTitle {
   font-size: 30px;
   margin-bottom: 20px;
-  color: lightcoral;
-}
-
-.settingsDeleteTitle {
-  color: red;
-  font-size: 12px;
-  cursor: pointer;
 }
 
 .settingsForm {
@@ -34,26 +27,27 @@
 .settingsPP {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin: 10px 0;
 }
 
 .settingsPP > img {
-  width: 70px;
-  height: 70px;
-  border-radius: 20px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
   object-fit: cover;
 }
 
 .settingsPPIcon {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: lightcoral;
+  background-color: #eee;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 10px;
+  margin-left: 5px;
   cursor: pointer;
 }
 
@@ -63,21 +57,30 @@
 }
 
 .settingsForm > input {
-  color: gray;
+  color: #495057;
   margin: 10px 0;
   height: 30px;
   border: none;
+  font-size: 1rem;
   border-bottom: 1px solid lightgray;
+}
+
+.settingsForm > input:focus {
+  outline: none;
 }
 
 .settingsSubmit {
   width: 150px;
-  align-self: center;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  background-color: teal;
-  padding: 10px;
-  margin-top: 20px;
-  cursor: pointer;
+  margin: 20px auto;
+}
+
+.edit-icon {
+  font-size: 1.2rem !important;
+}
+
+.text-success {
+  color: green;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1rem;
 }

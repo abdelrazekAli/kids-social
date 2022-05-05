@@ -42,7 +42,7 @@ export default function Login() {
           <form onSubmit={handleForm}>
             <input
               className="login-input"
-              placeholder="Email Address"
+              placeholder="Email"
               type="email"
               required
               ref={email}
