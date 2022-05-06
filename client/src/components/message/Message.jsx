@@ -4,17 +4,19 @@ import { format } from "timeago.js";
 export default function Message({ own, msg }) {
   return (
     <>
-      {own ? (
-        <div className={"position-relative d-flex justify-content-end mb-4"}>
-          <div className="msg_cotainer_send">{msg.content}</div>
-          <span className="msg_time_send">{format(msg.createdAt)}</span>
+      <div
+        className={
+          (own ? "justify-content-end" : "justify-content-start") +
+          " position-relative d-flex  mb-4"
+        }
+      >
+        <div className={own ? "msg_cotainer_send" : "msg_cotainer"}>
+          {msg.content}
         </div>
-      ) : (
-        <div className="position-relative d-flex justify-content-start mb-4">
-          <div className="msg_cotainer">{msg.content}</div>
-          <span className="msg_time">{format(msg.createdAt)}</span>
-        </div>
-      )}
+        <span className={own ? "msg_time_send" : "msg_time"}>
+          {format(msg.createdAt)}
+        </span>
+      </div>
     </>
   );
 }

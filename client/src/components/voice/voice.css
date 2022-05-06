@@ -1,0 +1,3 @@
+.main-audio-bg audio::-webkit-media-controls-panel {
+  background-color: var(--main-color);
+}

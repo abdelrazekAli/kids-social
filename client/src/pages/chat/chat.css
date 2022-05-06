@@ -202,7 +202,8 @@ textarea[name="msg-input"] {
   margin-top: auto;
   margin-bottom: auto;
   border-radius: 25px;
-  background-color: #33b5e5;
+  background-color: var(--main-color);
+  color: #fff;
   padding: 10px;
   position: relative;
 }
@@ -449,7 +450,7 @@ textarea.form-control {
   border: none;
   background: #fff;
   align-items: center;
-  border-radius: 0px 15px 15px 0px;
+  border-radius: 0px 15px 15px 0px !important;
 }
 /* /Messages container */
 .rightbarOnlineLg {

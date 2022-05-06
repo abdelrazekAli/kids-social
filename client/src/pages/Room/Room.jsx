@@ -135,7 +135,7 @@ export default function Room() {
             style={type === "voice" ? { display: "none" } : null}
           />
         ))}
-        {type === "voice" && <img src={"/assets/signal.gif"} alt="" />}
+        {type === "voice" && <img src={"/assets/images/signal.gif"} alt="" />}
         <div className="videos">
           <video
             muted

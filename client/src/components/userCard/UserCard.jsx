@@ -8,7 +8,7 @@ const UserCard = ({ user }) => {
     <div className="user-chat-card mb-2">
       <img
         src={
-          user.profilePicture ? PF + user.img : "/assets/person/noAvatar.png"
+          user.profilePicture ? PF + user.img : "/assets/images/noAvatar.png"
         }
         alt="user"
       />

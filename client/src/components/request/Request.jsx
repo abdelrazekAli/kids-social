@@ -4,8 +4,6 @@ import { useState, useContext } from "react";
 import { CircularProgress } from "@material-ui/core";
 import { Context, axiosJWT } from "../../context/Context";
 
-const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
 const Request = ({ request }) => {
   const { user } = useContext(Context);
   const userImg = request.img;
@@ -42,7 +40,9 @@ const Request = ({ request }) => {
       <Link to={`/profile/${request._id}`}>
         <img
           className="req-img"
-          src={userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`}
+          src={
+            userImg ? `/images/users/${userImg}` : `/assets/images/noAvatar.png`
+          }
           alt="userImg"
         />
       </Link>

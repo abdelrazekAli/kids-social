@@ -32,7 +32,7 @@ export default function Rightbar({
     return (
       <>
         {!hideImg && (
-          <img className="rightbarAd" src={"/assets/ad.jpg"} alt="" />
+          <img className="rightbarAd" src={"/assets/images/ad.jpg"} alt="" />
         )}
         <h4 className="rightbarTitle">Friends</h4>
         <div className=" rightbarFriendList">
@@ -75,7 +75,7 @@ export default function Rightbar({
             </div>
           </>
         ) : (
-          <p className="no-online">There are no online friends</p>
+          <p className="no-online">No online friends</p>
         )}
       </>
     );

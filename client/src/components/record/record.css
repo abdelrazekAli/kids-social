@@ -1,0 +1,91 @@
+@-webkit-keyframes transform {
+  from {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1px);
+    -webkit-transform: translateY(-1px);
+    -moz-transform: translateY(-1px);
+    -ms-transform: translateY(-1px);
+  }
+}
+@keyframes transform {
+  from {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+  }
+  to {
+    transform: translateY(-1px);
+    -webkit-transform: translateY(-1px);
+    -moz-transform: translateY(-1px);
+    -ms-transform: translateY(-1px);
+  }
+}
+@-webkit-keyframes shadow {
+  from {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.25);
+  }
+  to {
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+}
+@keyframes shadow {
+  from {
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.25);
+  }
+  to {
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+}
+.flexbox-container {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+  justify-content: center;
+}
+.voice-record {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--main-color);
+  border-radius: 50%;
+  color: #fff;
+  display: table-cell;
+  font-size: 1.5em;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  width: 40px;
+  -webkit-box-shadow: -1px 1px 15px -5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 1px 15px -5px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 1px 15px -5px rgba(0, 0, 0, 0.75);
+}
+.voice-record:hover {
+  cursor: pointer;
+  -webkit-box-shadow: -1px 1px 35px -5px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 1px 35px -5px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 1px 35px -5px rgba(0, 0, 0, 0.75);
+  animation: transform 0.5s forwards, shadow 1s forwards;
+  -ms-animation: transform 0.5s forwards, shadow 1s forwards;
+  -moz-animation: transform 0.5s forwards, shadow 1s forwards;
+  -webkit-animation: transform 0.5s forwards, shadow 1s forwards;
+}
+.record-wrapper {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem !important;
+}
+.hidden {
+  display: none;
+}

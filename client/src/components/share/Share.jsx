@@ -1,5 +1,4 @@
 import "./share.css";
-import axios from "axios";
 import { Context, axiosJWT } from "../../context/Context";
 import { CircularProgress } from "@material-ui/core";
 import { useRef, useState, useContext } from "react";
@@ -8,7 +7,6 @@ import { PermMedia, Cancel } from "@material-ui/icons";
 export default function Share() {
   const desc = useRef();
   const { user } = useContext(Context);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +27,14 @@ export default function Share() {
         newPost.img = fileName;
         console.log(newPost);
         try {
-          await axios.post("/api/v1/upload", data);
+          await axiosJWT({
+            method: "post",
+            url: "/api/v1/upload/images/posts",
+            headers: {
+              "auth-token": user.accessToken,
+            },
+            data: data,
+          });
         } catch (err) {
           console.log(err);
         }
@@ -55,7 +60,11 @@ export default function Share() {
         <div className="shareTop">
           <img
             className="shareProfileImg"
-            src={user.img ? `${PF}${user.img}` : `/assets/person/noAvatar.png`}
+            src={
+              user.img
+                ? `/images/users/${user.img}`
+                : `/assets/images/noAvatar.png`
+            }
             alt="userImg"
           />
           <input placeholder="Write a post" className="shareInput" ref={desc} />

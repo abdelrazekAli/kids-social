@@ -11,7 +11,9 @@ import { useContext, useEffect, useState, useRef } from "react";
 import { CircularProgress, IconButton } from "@material-ui/core";
 
 // Import components
+import Voice from "../../components/voice/Voice";
 import Topbar from "../../components/topbar/Topbar";
+import Record from "../../components/record/Record";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Message from "../../components/message/Message";
 import Rightbar from "../../components/rightbar/Rightbar";
@@ -22,7 +24,6 @@ export default function Chat() {
   const { user } = useContext(Context);
   const [friend, setFriend] = useState();
   const [loading, setLoading] = useState(false);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   // Messages
@@ -31,6 +32,7 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState();
   const [conversation, setConversation] = useState(0);
   const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [blobUrl, setBlobUrl] = useState();
 
   // Call
   const [callId, setCallId] = useState(uuid());
@@ -228,8 +230,8 @@ export default function Chat() {
                           <img
                             src={
                               friend.img
-                                ? `${PF}${friend.img}`
-                                : `/assets/person/noAvatar.png`
+                                ? `/images/users/${friend.img}`
+                                : `/assets/images/noAvatar.png`
                             }
                             className="rounded-circle user_img"
                             alt=""
@@ -286,6 +288,7 @@ export default function Chat() {
                   {messages.map((m) => (
                     <Message key={m._id} msg={m} own={m.sender === user._id} />
                   ))}
+                  {blobUrl && <Voice src={blobUrl} own={true} />}
                   <div ref={messagesEndRef} />
                 </div>
                 <div className="card-footer">
@@ -310,6 +313,7 @@ export default function Chat() {
                         <Send />
                       </span>
                     </button>
+                    <Record setBlobUrl={setBlobUrl} />
                   </div>
                 </div>
               </div>

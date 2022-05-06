@@ -12,7 +12,6 @@ import Rightbar from "../../components/rightbar/Rightbar";
 export default function Profile() {
   const { userId } = useParams();
   const { user } = useContext(Context);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const [auth, setAuth] = useState();
   const [profile, setProfile] = useState();
@@ -114,7 +113,9 @@ export default function Profile() {
                 <img
                   className="profileUserImg"
                   src={
-                    userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`
+                    userImg
+                      ? `/images/users/${userImg}`
+                      : `/assets/images/noAvatar.png`
                   }
                   alt="userImg"
                 />

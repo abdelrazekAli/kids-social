@@ -12,7 +12,6 @@ export default function SinglePost({ post, liked }) {
   const history = useHistory();
   const userImg = post.userId.img;
   const { user } = useContext(Context);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const [likes, setLikes] = useState(post.likes.length);
   const [isLiked, setIsLiked] = useState(liked);
@@ -83,7 +82,9 @@ export default function SinglePost({ post, liked }) {
               <img
                 className="postProfileImg"
                 src={
-                  userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`
+                  userImg
+                    ? `/images/users/${userImg}`
+                    : `/assets/images/noAvatar.png`
                 }
                 alt="userImg"
               />
@@ -108,14 +109,18 @@ export default function SinglePost({ post, liked }) {
         <div className="postCenter">
           <span className="postText">{post.desc}</span>
           {postImg && (
-            <img className="postImg" src={`${PF}${postImg}`} alt="postImg" />
+            <img
+              className="postImg"
+              src={`/images/posts/${postImg}`}
+              alt="postImg"
+            />
           )}
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
             <img
               className="likeIcon"
-              src={`${PF}like.png`}
+              src={"/assets/images/like.png"}
               onClick={likeHandler}
               alt=""
             />

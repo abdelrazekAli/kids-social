@@ -81,8 +81,6 @@ router.put("/:id", auth, async (req, res) => {
         accessToken: accessToken,
         refreshToken: refreshToken,
       });
-
-      res.status(200).json(others);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);

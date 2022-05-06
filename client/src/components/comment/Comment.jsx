@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 export default function Comment({ comment }) {
   const userImg = comment.userId.img;
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const { user } = useContext(Context);
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +28,9 @@ export default function Comment({ comment }) {
       <Link to={`/profile/${comment.userId._id}`}>
         <img
           className="comment-img"
-          src={userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`}
+          src={
+            userImg ? `/images/users/${userImg}` : `/assets/images/noAvatar.png`
+          }
           alt="userImg"
         />
       </Link>

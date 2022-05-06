@@ -18,7 +18,8 @@ export default function Learning() {
               <div
                 class="card__background"
                 style={{
-                  backgroundImage: "url('/assets/categories/history.jpg')",
+                  backgroundImage:
+                    "url('/assets/images/categories/history.jpg')",
                 }}
               ></div>
               <div class="card__content">
@@ -30,7 +31,8 @@ export default function Learning() {
               <div
                 class="card__background"
                 style={{
-                  backgroundImage: "url('/assets/categories/science.jpg')",
+                  backgroundImage:
+                    "url('/assets/images/categories/science.jpg')",
                 }}
               ></div>
               <div class="card__content">
@@ -42,7 +44,7 @@ export default function Learning() {
               <div
                 class="card__background"
                 style={{
-                  backgroundImage: "url('/assets/categories/space.jpg')",
+                  backgroundImage: "url('/assets/images/categories/space.jpg')",
                 }}
               ></div>
               <div class="card__content">
@@ -50,11 +52,12 @@ export default function Learning() {
                 <h3 class="card__heading">Space</h3>
               </div>
             </Link>
-            <Link class="card" to="/learning/programming">
+            <Link class="card" to="/learning/images/programming">
               <div
                 class="card__background"
                 style={{
-                  backgroundImage: "url('/assets/categories/programming.jpg')",
+                  backgroundImage:
+                    "url('/assets/images/categories/programming.jpg')",
                 }}
               ></div>
               <div class="card__content">

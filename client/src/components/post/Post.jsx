@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { axiosJWT, Context } from "../../context/Context";
 
 export default function Post({ post }) {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const postImg = post.img;
   const userImg = post.userId.img;
 
@@ -33,7 +32,9 @@ export default function Post({ post }) {
               <img
                 className="postProfileImg"
                 src={
-                  userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`
+                  userImg
+                    ? `/images/users/${userImg}`
+                    : `/assets/images/noAvatar.png`
                 }
                 alt="userImg"
               />
@@ -57,13 +58,17 @@ export default function Post({ post }) {
           <div className="postCenter">
             <span className="postText">{post.desc}</span>
             {postImg && (
-              <img className="postImg" src={`${PF}${postImg}`} alt="postImg" />
+              <img
+                className="postImg"
+                src={`/images/posts/${postImg}`}
+                alt="postImg"
+              />
             )}
           </div>
         </Link>
         <div className="postBottom">
           <div className="postBottomLeft" onClick={likeHandler}>
-            <img className="likeIcon" src={`${PF}like.png`} alt="" />
+            <img className="likeIcon" src={`/assets/images/like.png`} alt="" />
             <span className="postLikeCounter">{likes}</span>
           </div>
           <Link

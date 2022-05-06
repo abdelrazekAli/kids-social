@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export default function Friend({ user }) {
   const userImg = user.img;
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   return (
     <Link to={`/profile/${user?._id}`}>
@@ -11,7 +10,11 @@ export default function Friend({ user }) {
         <div className="rightbarProfileImgContainer">
           <img
             className="rightbarProfileImg"
-            src={userImg ? `${PF}${userImg}` : `/assets/person/noAvatar.png`}
+            src={
+              userImg
+                ? `/images/users/${userImg}`
+                : `/assets/images/noAvatar.png`
+            }
             alt="userImg"
           />
         </div>

@@ -101,6 +101,9 @@ a {
 .fs-2 {
   font-size: 2rem !important;
 }
+.fs-inherit {
+  font-size: inherit !important;
+}
 .text-cap {
   text-transform: capitalize;
 }

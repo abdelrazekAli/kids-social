@@ -1,5 +1,4 @@
 import "./settings.css";
-import axios from "axios";
 import { useContext, useState } from "react";
 import { Context, axiosJWT } from "../../context/Context";
 import { CircularProgress } from "@material-ui/core";
@@ -21,8 +20,6 @@ export default function Settings() {
     msg: "",
   });
 
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
@@ -38,7 +35,14 @@ export default function Settings() {
       data.append("file", file);
       updatedUser.img = filename;
       try {
-        await axios.post("/api/v1/upload", data);
+        await axiosJWT({
+          method: "post",
+          url: "/api/v1/upload/images/users",
+          headers: {
+            "auth-token": user.accessToken,
+          },
+          data: data,
+        });
       } catch (err) {
         dispatch({ type: "UPDATE_FAILURE" });
         setLoading(false);
@@ -87,8 +91,8 @@ export default function Settings() {
                   file
                     ? URL.createObjectURL(file)
                     : user.img
-                    ? PF + user.img
-                    : `/assets/person/noAvatar.png`
+                    ? "/images/users/" + user.img
+                    : `/assets/images/noAvatar.png`
                 }
                 alt=""
               />
