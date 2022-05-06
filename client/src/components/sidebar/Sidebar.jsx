@@ -1,11 +1,12 @@
 import "./sidebar.css";
 import axios from "axios";
+import emailjs from "emailjs-com";
 import Friend from "../friend/Friend";
 import { NavLink } from "react-router-dom";
-import { Search, Settings } from "@material-ui/icons";
 import AddIcon from "@material-ui/icons/Add";
 import { Context } from "../../context/Context";
 import { useState, useContext, useRef } from "react";
+import { Search, Settings } from "@material-ui/icons";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Chat, Group, Person, Home, School } from "@material-ui/icons";
 
@@ -56,6 +57,21 @@ export default function Sidebar() {
     if (e.target === modal.current) {
       setHideModal(!hideModal);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("hererr");
+
+    emailjs
+      .sendForm(
+        "service_lioq9kd",
+        "template_80lt9zl",
+        e.target,
+        "P5y7xvwHYXkrCpB3m"
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -124,7 +140,7 @@ export default function Sidebar() {
             <div className="searchbar">
               <Search />
               <input
-                placeholder="Search for relatives"
+                placeholder="Search for new friends"
                 onKeyUp={(e) => handleSearch(e.target.value)}
                 className="searchInput"
               />
@@ -148,17 +164,23 @@ export default function Sidebar() {
                 &times;
               </span>
               <h3>Invite Your Friends</h3>
-              <form className="invite-form">
+              <form className="invite-form" onSubmit={handleSubmit}>
                 <input
                   className="invite-input"
                   placeholder="Email Address"
                   type="email"
+                  name="email"
                 />
                 <input
-                  className="invite-input button"
-                  type="submit"
-                  value="Invite"
+                  className="invite-input"
+                  placeholder="Email Address"
+                  type="hidden"
+                  name="username"
+                  value={user.username}
                 />
+                <button className="invite-input button" type="submit">
+                  Invite
+                </button>
               </form>
             </div>
           </div>
