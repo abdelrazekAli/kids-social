@@ -28,6 +28,7 @@ mongoose.connect(process.env.DB_URL, connectOptions, () => {
   console.log("Connected to DB");
 });
 app.use("/images", express.static(path.join(__dirname, "public/images")));
+app.use("/voices", express.static(path.join(__dirname, "public/voices")));
 
 //middleware
 app.use(express.json());

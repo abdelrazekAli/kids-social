@@ -4,7 +4,7 @@ import axios from "axios";
 import { v1 as uuid } from "uuid";
 import { io } from "socket.io-client";
 import Button from "@material-ui/core/Button";
-import { Context } from "../../context/Context";
+import { Context, axiosJWT } from "../../context/Context";
 import { Link, useParams } from "react-router-dom";
 import { Send, Videocam, Phone } from "@material-ui/icons";
 import { useContext, useEffect, useState, useRef } from "react";
@@ -32,7 +32,6 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState();
   const [conversation, setConversation] = useState(0);
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [blobUrl, setBlobUrl] = useState();
 
   // Call
   const [callId, setCallId] = useState(uuid());
@@ -71,14 +70,20 @@ export default function Chat() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res3 = await axios.get(`/api/v1/messages/${conversation?._id}`);
+        const res3 = await axiosJWT({
+          method: "get",
+          url: `/api/v1/messages/${conversation?._id}`,
+          headers: {
+            "auth-token": user.accessToken,
+          },
+        });
         setMessages(res3.data);
       } catch (err) {
         console.log(err);
       }
     };
     fetchData();
-  }, [conversation]);
+  }, [conversation, user]);
 
   // Realtime Chat with Web Wocket
   useEffect(() => {
@@ -87,7 +92,7 @@ export default function Chat() {
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
-        content: data.text,
+        content: data.content,
         createdAt: Date.now(),
       });
     });
@@ -101,7 +106,6 @@ export default function Chat() {
   // Offer call
   useEffect(() => {
     socket.current.on("offering call", (data) => {
-      console.log(data);
       setOfferCall(true);
       setCallType(data.callType);
       setCallId(data.callId);
@@ -116,6 +120,15 @@ export default function Chat() {
     });
   }, [user]);
 
+  // emit new message
+  const emitMessage = (newMsg) => {
+    socket.current.emit("sendMessage", {
+      senderId: user._id,
+      receiverId: friendId,
+      content: newMsg,
+    });
+  };
+
   // Send message
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -127,14 +140,17 @@ export default function Chat() {
         conversationId: conversation._id,
       };
 
-      socket.current.emit("sendMessage", {
-        senderId: user._id,
-        receiverId: friendId,
-        text: newMessage,
-      });
+      emitMessage(newMessage);
 
       try {
-        const res = await axios.post(`/api/v1/messages`, msg);
+        let res = await axiosJWT({
+          method: "post",
+          url: "/api/v1/messages",
+          headers: {
+            "auth-token": user.accessToken,
+          },
+          data: msg,
+        });
         setMessages([...messages, res.data]);
         setLoading(false);
         setNewMessage("");
@@ -181,6 +197,21 @@ export default function Chat() {
     });
   };
   useEffect(scrollToBottom, [messages]);
+
+  // Render messages
+  const renderMessages = (msg) => {
+    let own = msg.sender === user._id;
+    if (msg?.content?.endsWith(".mp3"))
+      return (
+        <Voice
+          key={msg._id}
+          src={`/voices/${msg.content}`}
+          own={own}
+          time={msg.createdAt}
+        />
+      );
+    return <Message key={msg._id} msg={msg} own={own} />;
+  };
 
   return (
     <>
@@ -285,10 +316,7 @@ export default function Chat() {
                   </div>
                 )}
                 <div id="message-container" className="card-body msg_card_body">
-                  {messages.map((m) => (
-                    <Message key={m._id} msg={m} own={m.sender === user._id} />
-                  ))}
-                  {blobUrl && <Voice src={blobUrl} own={true} />}
+                  {messages.map((m) => renderMessages(m))}
                   <div ref={messagesEndRef} />
                 </div>
                 <div className="card-footer">
@@ -313,7 +341,12 @@ export default function Chat() {
                         <Send />
                       </span>
                     </button>
-                    <Record setBlobUrl={setBlobUrl} />
+                    <Record
+                      conversationId={conversation._id}
+                      setMessages={setMessages}
+                      messages={messages}
+                      emitMessage={emitMessage}
+                    />
                   </div>
                 </div>
               </div>

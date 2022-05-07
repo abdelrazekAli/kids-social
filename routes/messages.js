@@ -1,5 +1,7 @@
 const router = require("express").Router();
+const auth = require("./guards/auth.guard");
 const Message = require("../models/Message");
+
 const {
   msgValidation,
   checkUserId,
@@ -7,7 +9,7 @@ const {
 } = require("../utils/validation");
 
 //add
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   let validationResult = msgValidation(req.body);
   if (validationResult)
     return res.status(400).send(validationResult.details[0].message);
@@ -30,7 +32,7 @@ router.post("/", async (req, res) => {
 });
 
 //get conversation messages
-router.get("/:conversationId", async (req, res) => {
+router.get("/:conversationId", auth, async (req, res) => {
   const { conversationId } = req.params;
 
   // Check conversation id

@@ -1,6 +1,7 @@
 import "./voice.css";
+import { format } from "timeago.js";
 
-export default function Voice({ src, own }) {
+export default function Voice({ src, own, time }) {
   return (
     <>
       <div
@@ -11,6 +12,9 @@ export default function Voice({ src, own }) {
         }
       >
         <audio src={src} controls></audio>
+        <span className={own ? "msg_time_send" : "msg_time"}>
+          {format(time)}
+        </span>
       </div>
     </>
   );

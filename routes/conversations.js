@@ -1,9 +1,10 @@
 const router = require("express").Router();
+const auth = require("./guards/auth.guard");
 const Conversation = require("../models/Conversation");
 const { checkUserId } = require("../utils/validation");
 
 //new conv
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { senderId, receiverId } = req.body;
   try {
     // Check users id

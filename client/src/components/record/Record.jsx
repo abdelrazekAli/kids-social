@@ -3,7 +3,12 @@ import { useRef, useState, useContext } from "react";
 import { axiosJWT, Context } from "../../context/Context";
 import { Mic, Stop } from "@material-ui/icons";
 
-export default function Record({ setBlobUrl }) {
+export default function Record({
+  conversationId,
+  setMessages,
+  messages,
+  emitMessage,
+}) {
   const stopButtonRef = useRef(null);
   const { user } = useContext(Context);
   const [startRecord, setStartRecord] = useState(false);
@@ -24,14 +29,18 @@ export default function Record({ setBlobUrl }) {
         mediaRecorder.addEventListener("stop", async () => {
           let blob = new Blob(recordedChunks, { type: "audio/mp3;" });
           if (blob) {
-            setBlobUrl(URL.createObjectURL(blob));
-
             const data = new FormData();
             const fileName = `${Date.now()}_${user._id}.mp3`;
             data.append("name", fileName);
             data.append("file", blob);
+            const voiceMsg = {
+              sender: user._id,
+              content: fileName,
+              conversationId,
+            };
 
             try {
+              // Upload voice
               await axiosJWT({
                 method: "post",
                 url: "/api/v1/upload/voices",
@@ -40,6 +49,17 @@ export default function Record({ setBlobUrl }) {
                 },
                 data: data,
               });
+              // Post message
+              let res = await axiosJWT({
+                method: "post",
+                url: "/api/v1/messages",
+                headers: {
+                  "auth-token": user.accessToken,
+                },
+                data: voiceMsg,
+              });
+              emitMessage(fileName);
+              setMessages([...messages, res.data]);
             } catch (err) {
               console.log(err);
             }
@@ -60,9 +80,6 @@ export default function Record({ setBlobUrl }) {
 
   return (
     <>
-      {/* <a download="file.wav" href={blobUrl}>
-        {"download audio"}
-      </a> */}
       <div className="record-wrapper">
         {startRecord ? (
           <div ref={stopButtonRef} className="voice-record">
