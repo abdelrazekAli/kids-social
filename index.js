@@ -63,6 +63,14 @@ app.use("/api/v1/conversations", conversationRoute);
 // Server listening
 let port = process.env.port || 8800;
 
+// For production
+app.use(express.static("./client/build"));
+app.get("*", (req, res) => {
+  res.sendFile("index.html", {
+    root: __dirname + "/client/build",
+  });
+});
+
 server.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
