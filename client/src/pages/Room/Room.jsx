@@ -25,9 +25,11 @@ export default function Room() {
   const [friendName, setFriendName] = useState("");
   const [canceling, setCanceling] = useState(false);
 
-  // Refactor it plz
   useEffect(() => {
-    socketRef.current = io.connect("ws://localhost:8900");
+    // Socket connection
+    socketRef.current = io.connect("/");
+
+    // Get user permissions
     navigator.mediaDevices
       .getUserMedia(
         type === "video"
@@ -36,7 +38,11 @@ export default function Room() {
       )
       .then((stream) => {
         userVideo.current.srcObject = stream;
+
+        // Join room
         socketRef.current.emit("join room", roomID);
+
+        // Get room users
         socketRef.current.on("all users", (users) => {
           const peers = [];
           users.forEach((userID) => {
@@ -50,6 +56,7 @@ export default function Room() {
           setPeers(peers);
         });
 
+        // When new user join room
         socketRef.current.on("user joined", (payload) => {
           setWaiting(false);
           setJoined(true);
@@ -62,6 +69,7 @@ export default function Room() {
           setPeers((users) => [...users, peer]);
         });
 
+        // When receive returned signal
         socketRef.current.on("receiving returned signal", (payload) => {
           setWaiting(false);
 
@@ -71,6 +79,9 @@ export default function Room() {
       });
   }, [roomID, type]);
 
+  useEffect(() => {});
+
+  // When user cancel call
   useEffect(() => {
     socketRef.current.on("canceling call", (name) => {
       setFriendName(name);
@@ -78,7 +89,8 @@ export default function Room() {
     });
   }, []);
 
-  function createPeer(userToSignal, callerID, stream) {
+  // Create new peer
+  const createPeer = (userToSignal, callerID, stream) => {
     const peer = new Peer({
       initiator: true,
       trickle: false,
@@ -94,9 +106,10 @@ export default function Room() {
     });
 
     return peer;
-  }
+  };
 
-  function addPeer(incomingSignal, callerID, stream) {
+  // Add peer
+  const addPeer = (incomingSignal, callerID, stream) => {
     const peer = new Peer({
       initiator: false,
       trickle: false,
@@ -112,7 +125,7 @@ export default function Room() {
     peer.signal(incomingSignal);
 
     return peer;
-  }
+  };
 
   return (
     <>

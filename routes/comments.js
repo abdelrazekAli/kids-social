@@ -29,6 +29,8 @@ router.post("/", auth, async (req, res) => {
     // Save comment
     const newComment = new Comment({ userId, ...req.body });
     const savedComment = await newComment.save();
+
+    // Response
     res.status(200).json(savedComment);
   } catch (err) {
     console.log(err);
@@ -44,13 +46,16 @@ router.get("/:postId", async (req, res) => {
     let postResult = await checkPostId(postId);
     if (typeof postResult === "string") return res.status(400).send(postResult);
 
+    // Get comments
     let comments = await Comment.find({ postId: postId }).populate({
       path: "userId",
       select: "img username",
     });
 
+    // Response
     res.status(200).json(comments);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -61,6 +66,7 @@ router.put("/:commentId", auth, async (req, res) => {
   const { commentId } = req.params,
     userId = req.user._id,
     { postId } = req.body;
+
   try {
     // Validate comment
     let validationResult = commentValidation(req.body);
@@ -81,13 +87,18 @@ router.put("/:commentId", auth, async (req, res) => {
       ? res.status(400).send(commentResult)
       : (comment = commentResult);
 
+    // Check if user is the comment owner
     if (comment.userId === userId) {
+      // Update comment
       await comment.updateOne({ $set: req.body });
+
+      // Response
       res.status(200).json("comment has been updated");
     } else {
       res.status(403).json("you can update only your comment");
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -104,14 +115,17 @@ router.delete("/:commentId", auth, async (req, res) => {
     typeof commentResult === "string"
       ? res.status(400).send(commentResult)
       : (comment = commentResult);
-    console.log(comment.userId, userId);
+
+    // Check if user is the comment owner
     if (comment.userId._id == userId) {
       await Comment.findByIdAndDelete(commentId);
+      // Resopnse
       res.status(200).json("comment has been deleted");
     } else {
       res.status(403).json("you can delete only your comment");
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });

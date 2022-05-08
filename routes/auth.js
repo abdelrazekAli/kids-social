@@ -6,19 +6,21 @@ const router = require("express").Router();
 const generateAccessToken = require("../utils/token");
 const { userValidation } = require("../utils/validation");
 
-//REGISTER
+// Register
 router.post("/register", async (req, res) => {
   try {
-    //check user data
+    // Check user data
     let { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res.status(400).send("username, email, password are required");
     }
 
+    // Validate body
     let validationResult = userValidation(req.body);
     if (validationResult)
       return res.status(400).send(validationResult.details[0].message);
 
+    // Check email
     let emailCheck = await User.findOne({ email: email });
     if (emailCheck) return res.status(409).send("email is already used");
 
@@ -35,13 +37,16 @@ router.post("/register", async (req, res) => {
 
     //save user
     const user = await newUser.save();
+
+    // Response
     res.status(200).json(user);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-//LOGIN
+// Login
 router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
@@ -73,8 +78,10 @@ router.post("/login", async (req, res) => {
     let newToken = new Token({
       token: refreshToken,
     });
+
     await newToken.save();
 
+    // Set header and response
     res.header("auth-token", accessToken).json({
       _id: user._id,
       username: user.username,
@@ -104,8 +111,8 @@ router.post("/logout", async (req, res) => {
 
     res.status(204).send("Successfully logout");
   } catch (err) {
-    res.status(500).send("Failed to logout");
     console.log(err);
+    res.status(500).send("Failed to logout");
   }
 });
 
@@ -125,11 +132,12 @@ router.post("/refresh-token", async (req, res) => {
       // Generate new access token
       const accessToken = generateAccessToken({ _id: user._id });
 
+      // Response
       res.status(200).send({ accessToken: accessToken });
     });
   } catch (err) {
-    res.status(500).send("Failed to refresh token");
     console.log(err);
+    res.status(500).send("Failed to refresh token");
   }
 });
 

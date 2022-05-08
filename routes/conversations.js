@@ -3,7 +3,7 @@ const auth = require("./guards/auth.guard");
 const Conversation = require("../models/Conversation");
 const { checkUserId } = require("../utils/validation");
 
-//new conv
+// New conv
 router.post("/", auth, async (req, res) => {
   const { senderId, receiverId } = req.body;
   try {
@@ -22,12 +22,16 @@ router.post("/", auth, async (req, res) => {
         .status(400)
         .send("There is already conversation with these ids");
 
+    // Save conv
     const newConversation = new Conversation({
       members: [senderId, receiverId],
     });
     const savedConversation = await newConversation.save();
+
+    // Response
     res.status(200).json(savedConversation);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
@@ -40,16 +44,18 @@ router.get("/:userId", async (req, res) => {
     const result1 = await checkUserId(userId);
     if (typeof result1 === "string") return res.status(400).send(result1);
 
+    // Get conv
     const conversation = await Conversation.find({
       members: { $in: [userId] },
     });
     res.status(200).json(conversation);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
 
-// get conv of two users
+// Get conv of two users
 router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
   const { firstUserId, secondUserId } = req.params;
   try {
@@ -58,11 +64,16 @@ router.get("/find/:firstUserId/:secondUserId", async (req, res) => {
     if (typeof result1 === "string") return res.status(400).send(result1);
     const result2 = await checkUserId(secondUserId);
     if (typeof result2 === "string") return res.status(400).send(result2);
+
+    // Get conv
     const conversation = await Conversation.findOne({
       members: { $all: [firstUserId, secondUserId] },
     });
+
+    // Response
     res.status(200).json(conversation);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });

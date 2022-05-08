@@ -87,7 +87,7 @@ export default function Chat() {
 
   // Realtime Chat with Web Wocket
   useEffect(() => {
-    socket.current = io("ws://localhost:8900");
+    socket.current = io("/");
 
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
@@ -132,8 +132,9 @@ export default function Chat() {
   // Send message
   const sendMessage = async (e) => {
     e.preventDefault();
-    setLoading(true);
     if (newMessage) {
+      setLoading(true);
+
       const msg = {
         sender: user._id,
         content: newMessage,

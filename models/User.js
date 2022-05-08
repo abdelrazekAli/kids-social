@@ -35,11 +35,6 @@ const UserSchema = new mongoose.Schema(
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
       default: [],
     },
-    // ,
-    // relationship: {
-    //   type: Number,
-    //   enum: [1, 2, 3],
-    // }
   },
   { timestamps: true }
 );

@@ -2,10 +2,11 @@ const Joi = require("joi");
 const path = require("path");
 const User = require("../models/User");
 const Post = require("../models/Post");
-const Conversation = require("../models/Conversation");
 const Comment = require("../models/Comment");
 const { ObjectId } = require("mongoose").Types;
+const Conversation = require("../models/Conversation");
 
+// User validation
 exports.userValidation = (data) => {
   const schema = Joi.object({
     username: Joi.string().min(3).max(20),
@@ -17,6 +18,7 @@ exports.userValidation = (data) => {
   return schema.validate(data).error;
 };
 
+// Post validation
 exports.postValidation = (data) => {
   const schema = Joi.object({
     desc: Joi.string().allow(null, ""),
@@ -26,6 +28,7 @@ exports.postValidation = (data) => {
   return schema.validate(data).error;
 };
 
+// Comment validation
 exports.commentValidation = (data) => {
   const schema = Joi.object({
     desc: Joi.string().max(1000).required(),
@@ -35,6 +38,7 @@ exports.commentValidation = (data) => {
   return schema.validate(data).error;
 };
 
+// Message validation
 exports.msgValidation = (data) => {
   const schema = Joi.object({
     conversationId: Joi.string().required(),
@@ -44,6 +48,7 @@ exports.msgValidation = (data) => {
   return schema.validate(data).error;
 };
 
+// Image validation
 exports.checkImgFromat = (image) => {
   let imageName = image.originalname;
   let imgExtension = path.extname(imageName);

@@ -459,7 +459,7 @@ textarea.form-control {
   border-radius: 50%;
   background-color: #0ec067;
   position: absolute;
-  top: -2px;
+  top: 6px;
   right: 0;
   border: 2px solid white;
 }
