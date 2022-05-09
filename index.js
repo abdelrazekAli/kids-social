@@ -60,9 +60,6 @@ app.use("/api/v1/messages", messageRoute);
 app.use("/api/v1/comments", commentRoute);
 app.use("/api/v1/conversations", conversationRoute);
 
-// Server listening
-let port = process.env.port || 8800;
-
 // For production
 app.use(express.static("./client/build"));
 app.get("*", (req, res) => {
@@ -71,6 +68,8 @@ app.get("*", (req, res) => {
   });
 });
 
+// Server listening
+let port = process.env.PORT || 8800;
 server.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });

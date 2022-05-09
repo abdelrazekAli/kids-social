@@ -95,8 +95,8 @@ module.exports = (io) => {
       io.emit("getUsers", users);
 
       // Remove user from room
-      let room = callUsers[roomID];
       const roomID = socketToRoom[socket.id];
+      let room = callUsers[roomID];
 
       if (room) {
         room = room.filter((id) => id !== socket.id);
