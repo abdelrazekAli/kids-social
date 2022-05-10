@@ -36,8 +36,9 @@ export default function Rightbar({
         )}
         <h4 className="rightbarTitle">Friends</h4>
         <div className=" rightbarFriendList">
-          {friends.length > 0 &&
-            friends.map((u) => <Friend key={u._id} user={u} />)}
+          {friends.length > 0
+            ? friends.map((u) => <Friend key={u._id} user={u} />)
+            : "No friends"}
         </div>
       </>
     );
@@ -47,15 +48,15 @@ export default function Rightbar({
     return (
       <>
         <div className="btn-container"></div>
-        {userFriends?.length > 0 && (
-          <>
-            <h4 className="rightbarTitle">friends</h4>
-            <div className="rightbarFollowings">
-              {userFriends.map((u) => (
-                <Friend key={u._id} user={u} />
-              ))}
-            </div>
-          </>
+        <h4 className="rightbarTitle">friends</h4>
+        {userFriends?.length > 0 ? (
+          <div className="rightbarFollowings">
+            {userFriends.map((u) => (
+              <Friend key={u._id} user={u} />
+            ))}
+          </div>
+        ) : (
+          <div className="feedWrapper">No friends</div>
         )}
       </>
     );

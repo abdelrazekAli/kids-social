@@ -28,7 +28,7 @@ export default function Requests() {
           {requests.length > 0 ? (
             requests.map((req) => <Request key={req._id} request={req} />)
           ) : (
-            <h4 className="h4-fs m-1">There are no friend requests</h4>
+            <h4 className="h4-fs m-1">No friend requests</h4>
           )}
         </div>
         <Rightbar home={true} />

@@ -1,7 +1,8 @@
 import "./singlePost.css";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import { format } from "timeago.js";
 import Comment from "../comment/Comment";
+import { Link, useHistory } from "react-router-dom";
 import { CircularProgress } from "@material-ui/core";
 import { useState, useEffect, useContext } from "react";
 import { Context, axiosJWT } from "../../context/Context";
@@ -13,11 +14,11 @@ export default function SinglePost({ post, liked }) {
   const userImg = post.userId.img;
   const { user } = useContext(Context);
 
-  const [likes, setLikes] = useState(post.likes.length);
-  const [isLiked, setIsLiked] = useState(liked);
-  const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState();
   const [comments, setComments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isLiked, setIsLiked] = useState(liked);
+  const [likes, setLikes] = useState(post.likes.length);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -93,9 +94,7 @@ export default function SinglePost({ post, liked }) {
               <Link to={`/profile/${post.userId._id}`}>
                 <span className="postUsername">{post.userId.username}</span>
               </Link>
-              <span className="postDate">
-                {new Date(post.createdAt).toLocaleString()}
-              </span>
+              <span className="postDate">{format(post.createdAt)}</span>
             </div>
           </div>
           {post.userId._id === user._id && (
@@ -127,7 +126,7 @@ export default function SinglePost({ post, liked }) {
             <span className="postLikeCounter">{likes}</span>
           </div>
           <div className="postBottomRight">
-            <span className="postCommentText">Comments</span>
+            <span className="postCommentText">{comments.length} Comments</span>
           </div>
         </div>
         <div className="input-group mt-2 ">
@@ -158,8 +157,11 @@ export default function SinglePost({ post, liked }) {
             <CircularProgress color="inherit" size="25px" />
           </div>
         )}
-        {comments.length > 0 &&
-          comments.map((c) => <Comment key={c._id} comment={c} />)}
+        {comments.length > 0 ? (
+          comments.map((c) => <Comment key={c._id} comment={c} />)
+        ) : (
+          <span className="no-comments">No comments yet</span>
+        )}
       </div>
     </div>
   );

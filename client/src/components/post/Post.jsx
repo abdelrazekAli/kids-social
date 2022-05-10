@@ -1,6 +1,8 @@
 import "./post.css";
-import { useState, useContext } from "react";
+import axios from "axios";
+import { format } from "timeago.js";
 import { Link } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
 import { axiosJWT, Context } from "../../context/Context";
 
 export default function Post({ post }) {
@@ -10,6 +12,7 @@ export default function Post({ post }) {
   const { user } = useContext(Context);
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(post.likes.length);
+  const [commentsLength, setCommentsLength] = useState(0);
 
   const likeHandler = async () => {
     setLikes(isLiked ? likes - 1 : likes + 1);
@@ -23,6 +26,17 @@ export default function Post({ post }) {
     });
   };
 
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get(`/api/v1/comments/${post._id}`);
+        setCommentsLength(res.data.length);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchComments();
+  }, [post._id]);
   return (
     <div className="post">
       <div className="postWrapper">
@@ -43,9 +57,7 @@ export default function Post({ post }) {
               <Link to={`/profile/${post.userId._id}`}>
                 <span className="postUsername">{post.userId.username}</span>
               </Link>
-              <span className="postDate">
-                {new Date(post.createdAt).toLocaleString()}
-              </span>
+              <span className="postDate">{format(post.createdAt)}</span>
             </div>
           </div>
         </div>
@@ -67,8 +79,13 @@ export default function Post({ post }) {
           </div>
         </Link>
         <div className="postBottom">
-          <div className="postBottomLeft" onClick={likeHandler}>
-            <img className="likeIcon" src={`/assets/images/like.png`} alt="" />
+          <div className="postBottomLeft">
+            <img
+              className="likeIcon"
+              src={`/assets/images/like.png`}
+              alt=""
+              onClick={likeHandler}
+            />
             <span className="postLikeCounter">{likes}</span>
           </div>
           <Link
@@ -78,7 +95,7 @@ export default function Post({ post }) {
             }}
           >
             <div className="postBottomRight">
-              <span className="postCommentText">Comments</span>
+              <span className="postCommentText">{commentsLength} Comments</span>
             </div>
           </Link>
         </div>

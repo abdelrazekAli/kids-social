@@ -1,7 +1,7 @@
 import "./profile.css";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
 import Feed from "../../components/feed/Feed";
+import { Link, useParams } from "react-router-dom";
 import Topbar from "../../components/topbar/Topbar";
 import { CircularProgress } from "@material-ui/core";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -175,7 +175,6 @@ export default function Profile() {
                     Add
                   </button>
                 )}
-                {/* {followed ? <Remove /> : <PersonAddIcon className="pr-5" />} */}
               </div>
             )}
             {loading && (

@@ -1,10 +1,16 @@
 :root {
   --main-color: #0080ff;
 }
+
+#root {
+  overflow: hidden;
+}
+
 * {
   margin: 0;
   font-family: "Roboto", sans-serif;
 }
+
 body {
   color: #212529;
 }
@@ -112,4 +118,7 @@ a {
 }
 .p-relative {
   position: relative;
+}
+.color-darker {
+  color: #777;
 }

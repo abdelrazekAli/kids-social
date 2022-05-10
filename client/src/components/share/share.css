@@ -112,8 +112,4 @@
   .shareHr {
     margin: 12px;
   }
-  .shareBottom {
-    flex-direction: column;
-    gap: 12px;
-  }
 }

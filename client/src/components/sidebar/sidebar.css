@@ -1,6 +1,5 @@
 .sidebar {
   flex: 3;
-  height: calc(100vh - 50px);
   overflow-y: scroll;
   position: sticky;
   top: 50px;
@@ -135,7 +134,7 @@
     margin-left: 0;
   }
   .searchInput {
-    width: 100%;
+    width: 25%;
   }
   .sidebarWrapper {
     padding: 10px;
@@ -232,5 +231,8 @@
   }
   .invite-input.button {
     margin: 5px auto;
+  }
+  .modal-content {
+    width: 90%;
   }
 }

@@ -5,6 +5,7 @@ import { CircularProgress } from "@material-ui/core";
 import { Edit } from "@material-ui/icons";
 
 // Import components
+import Error from "../../components/error/Error";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 
@@ -21,8 +22,10 @@ export default function Settings() {
   });
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
+    setSuccess(false);
+    setError({ isError: false, msg: "" });
     dispatch({ type: "UPDATE_START" });
     const updatedUser = {
       username,
@@ -135,7 +138,7 @@ export default function Settings() {
             {success && (
               <span className="text-success">Profile has been updated.</span>
             )}
-            {error.isError && <div>{error.msg}</div>}
+            {error.isError && <Error msg={error.msg} />}
           </form>
         </div>
       </div>

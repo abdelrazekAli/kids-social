@@ -23,7 +23,11 @@ export default function Feed({ share, profile }) {
     <div className="feed">
       <div className="feedWrapper">
         {share && <Share />}
-        {posts.length > 0 && posts.map((p) => <Post key={p._id} post={p} />)}
+        {posts.length > 0 ? (
+          posts.map((p) => <Post key={p._id} post={p} />)
+        ) : (
+          <div>No posts</div>
+        )}
       </div>
     </div>
   );

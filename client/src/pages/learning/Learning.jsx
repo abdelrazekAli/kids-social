@@ -11,58 +11,58 @@ export default function Learning() {
       <Topbar />
       <div className="learnContainer">
         <Sidebar />
-        <div class="learning-cards">
+        <div className="learning-cards">
           <p className="learnHeader">Reading Is Dreaming With Open Eyes</p>
-          <div class="card-grid">
-            <Link class="card" to="/learning/history">
+          <div className="card-grid">
+            <Link className="card" to="/learning/history">
               <div
-                class="card__background"
+                className="card__background"
                 style={{
                   backgroundImage:
                     "url('/assets/images/categories/history.jpg')",
                 }}
               ></div>
-              <div class="card__content">
-                <p class="card__category">Category</p>
-                <h3 class="card__heading">History</h3>
+              <div className="card__content">
+                <p className="card__category">Category</p>
+                <h3 className="card__heading">History</h3>
               </div>
             </Link>
-            <Link class="card" to="/learning/science">
+            <Link className="card" to="/learning/science">
               <div
-                class="card__background"
+                className="card__background"
                 style={{
                   backgroundImage:
                     "url('/assets/images/categories/science.jpg')",
                 }}
               ></div>
-              <div class="card__content">
-                <p class="card__category">Category</p>
-                <h3 class="card__heading">Science</h3>
+              <div className="card__content">
+                <p className="card__category">Category</p>
+                <h3 className="card__heading">Science</h3>
               </div>
             </Link>
-            <Link class="card" to="/learning/space">
+            <Link className="card" to="/learning/space">
               <div
-                class="card__background"
+                className="card__background"
                 style={{
                   backgroundImage: "url('/assets/images/categories/space.jpg')",
                 }}
               ></div>
-              <div class="card__content">
-                <p class="card__category">Category</p>
-                <h3 class="card__heading">Space</h3>
+              <div className="card__content">
+                <p className="card__category">Category</p>
+                <h3 className="card__heading">Space</h3>
               </div>
             </Link>
-            <Link class="card" to="/learning/images/programming">
+            <Link className="card" to="/learning/images/programming">
               <div
-                class="card__background"
+                className="card__background"
                 style={{
                   backgroundImage:
                     "url('/assets/images/categories/programming.jpg')",
                 }}
               ></div>
-              <div class="card__content">
-                <p class="card__category">Category</p>
-                <h3 class="card__heading">Programming</h3>
+              <div className="card__content">
+                <p className="card__category">Category</p>
+                <h3 className="card__heading">Programming</h3>
               </div>
             </Link>
             <div></div>

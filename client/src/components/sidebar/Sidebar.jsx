@@ -5,28 +5,45 @@ import Friend from "../friend/Friend";
 import { NavLink } from "react-router-dom";
 import AddIcon from "@material-ui/icons/Add";
 import { Context } from "../../context/Context";
-import { useState, useContext, useRef } from "react";
-import { Search, Settings } from "@material-ui/icons";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { Chat, Group, Person, Home, School } from "@material-ui/icons";
+import { useState, useContext, useRef, useEffect } from "react";
+import { CircularProgress } from "@material-ui/core";
+import {
+  Chat,
+  Group,
+  Person,
+  Home,
+  School,
+  Search,
+  Settings,
+  ExitToApp,
+} from "@material-ui/icons";
+
+// Import components
+import Error from "../../components/error/Error";
 
 export default function Sidebar() {
   const modal = useRef(null);
   const span = useRef(null);
 
-  const { user, dispatch } = useContext(Context);
+  const [email, setEmail] = useState("");
+  const [users, setUsers] = useState(null);
   const [sidebar, setSidebar] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { user, dispatch } = useContext(Context);
   const [hideModal, setHideModal] = useState(true);
-  const [users, setUsers] = useState([]);
+  const [isVisible, setIsVisible] = useState(true);
+  const [searchValue, setSearchValue] = useState(false);
+  const [invitationFaild, setInvitationFaild] = useState(false);
+  const [invitationSuccess, setInvitationSuccess] = useState(false);
 
   const toggleSidebar = () => {
     setSidebar(!sidebar);
-    document.getElementById("root").classList.toggle("hide-root");
   };
 
   const handleSearch = async (search) => {
     try {
       if (search.length > 0) {
+        setSearchValue(search);
         // Get users
         const res = await axios.get(`/api/v1/users?search=${search}`);
         setUsers(res.data);
@@ -61,26 +78,53 @@ export default function Sidebar() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("hererr");
-
-    emailjs
-      .sendForm(
-        "service_lioq9kd",
-        "template_80lt9zl",
-        e.target,
-        "P5y7xvwHYXkrCpB3m"
-      )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    setInvitationSuccess(false);
+    setInvitationFaild(false);
+    if (email.length > 0) {
+      setLoading(true);
+      emailjs
+        .sendForm(
+          "service_lioq9kd",
+          "template_80lt9zl",
+          e.target,
+          "P5y7xvwHYXkrCpB3m"
+        )
+        .then(() => {
+          setLoading(false);
+          setInvitationSuccess(true);
+        })
+        .catch(() => {
+          setLoading(false);
+          setInvitationFaild(true);
+          setInvitationSuccess(false);
+        });
+    }
   };
+
+  // Hide Toggle button on scroll
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      let heightToHideFrom = 50;
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+
+      if (winScroll > heightToHideFrom) {
+        isVisible && setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+    });
+  }, [isVisible]);
 
   return (
     <div>
-      <button className="toggle-button" onClick={toggleSidebar}>
-        <div className="toggle-button-line" />
-        <div className="toggle-button-line" />
-        <div className="toggle-button-line" />
-      </button>
+      {isVisible && (
+        <button className="toggle-button" onClick={toggleSidebar}>
+          <div className="toggle-button-line" />
+          <div className="toggle-button-line" />
+          <div className="toggle-button-line" />
+        </button>
+      )}
       <div className={sidebar ? "sidebar d-block" : "sidebar"}>
         <div className="sidebarWrapper">
           <ul className="sidebarList">
@@ -130,7 +174,7 @@ export default function Sidebar() {
               <span className="sidebarListItemText">Invite Friend</span>
             </li>
             <li className="sidebarListItem" onClick={handleLogout}>
-              <ExitToAppIcon className="sidebarIcon" />
+              <ExitToApp className="sidebarIcon" />
               <span className="sidebarListItemText">Logout</span>
             </li>
           </ul>
@@ -142,18 +186,25 @@ export default function Sidebar() {
               <input
                 placeholder="Search for new friends"
                 onKeyUp={(e) => handleSearch(e.target.value)}
+                maxLength={20}
                 className="searchInput"
               />
             </div>
             <div className="mt-1">
-              {users.length > 0 &&
-                users.map((u) => <Friend key={u._id} user={u} />)}
+              {Array.isArray(users) &&
+                (users.length > 0 ? (
+                  users.map((u) => <Friend key={u._id} user={u} />)
+                ) : (
+                  <span className="color-darker">
+                    No users matches "{searchValue}"
+                  </span>
+                ))}
             </div>
           </div>
         </div>
       </div>
       {!hideModal && (
-        <modal>
+        <div>
           <div ref={modal} id="myModal" className="modal">
             <div className="modal-content p-relative">
               <span
@@ -163,6 +214,11 @@ export default function Sidebar() {
               >
                 &times;
               </span>
+              {loading && (
+                <div className="loading">
+                  <CircularProgress color="inherit" size="20px" />
+                </div>
+              )}
               <h3>Invite Your Friends</h3>
               <form className="invite-form" onSubmit={handleSubmit}>
                 <input
@@ -170,6 +226,7 @@ export default function Sidebar() {
                   placeholder="Email Address"
                   type="email"
                   name="email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <input
                   className="invite-input"
@@ -178,13 +235,21 @@ export default function Sidebar() {
                   name="username"
                   value={user.username}
                 />
-                <button className="invite-input button" type="submit">
+                <button
+                  className="invite-input button"
+                  type="submit"
+                  disabled={loading}
+                >
                   Invite
                 </button>
               </form>
+              {invitationSuccess && (
+                <span className="text-success">Invitation has been sent.</span>
+              )}
+              {invitationFaild && <Error msg={"Faild to send invitation"} />}
             </div>
           </div>
-        </modal>
+        </div>
       )}
     </div>
   );

@@ -1,11 +1,14 @@
-import { useContext } from "react";
-import { Context } from "./context/Context";
+// Import react router
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
+
+// Import user context
+import { useContext } from "react";
+import { Context } from "./context/Context";
 
 // Import pages
 import Home from "./pages/home/Home";

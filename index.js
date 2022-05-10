@@ -1,7 +1,6 @@
 // Import Packages
 const cors = require("cors");
 const path = require("path");
-const helmet = require("helmet");
 const morgan = require("morgan");
 
 // Server INIT
@@ -43,7 +42,6 @@ require("mongoose").connect(process.env.DB_URL, connectOptions, () => {
 
 // Main Middlewares
 app.use(cors());
-app.use(helmet());
 app.use(express.json());
 app.use(morgan("common"));
 
@@ -61,12 +59,12 @@ app.use("/api/v1/comments", commentRoute);
 app.use("/api/v1/conversations", conversationRoute);
 
 // For production
-app.use(express.static("./client/build"));
-app.get("*", (req, res) => {
-  res.sendFile("index.html", {
-    root: __dirname + "/client/build",
+if (process.env.PROD) {
+  app.use(express.static(path.join(__dirname, "./client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
   });
-});
+}
 
 // Server listening
 let port = process.env.PORT || 8800;

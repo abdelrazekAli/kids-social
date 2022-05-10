@@ -379,8 +379,9 @@ textarea[name="msg-input"] {
   margin-right: 1rem;
 }
 @media (max-width: 769px) {
-  .container-fluid {
+  .chatContainer .container-fluid {
     width: 100%;
+    padding-right: 0 !important;
   }
 }
 .form-control {

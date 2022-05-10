@@ -5,7 +5,6 @@
 .profileRight {
   flex: 9;
   overflow: hidden;
-  /* z-index: -1; */
 }
 
 .profileCover {

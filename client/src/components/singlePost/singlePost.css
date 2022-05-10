@@ -14,3 +14,7 @@
 .postDeleteIcon:hover {
   opacity: 1;
 }
+.no-comments {
+  display: block;
+  margin: 1rem;
+}
