@@ -61,6 +61,8 @@
 .postBottomLeft {
   display: flex;
   align-items: center;
+  position: relative;
+  gap: 3px;
 }
 
 .likeIcon {
@@ -72,6 +74,7 @@
 
 .postLikeCounter {
   font-size: 15px;
+  cursor: pointer;
 }
 
 .postCommentText {
@@ -80,8 +83,45 @@
   font-size: 15px;
 }
 
+.likes-users {
+  background-color: #f1f1f1;
+  padding: 0.5rem;
+  border-radius: 15px;
+  position: absolute;
+  bottom: 25px;
+  left: 15px;
+}
+
+.likes-users li {
+  list-style: none;
+}
+.likes-users li a {
+  color: var(--main-color);
+}
+
 @media (max-width: 576px) {
   .postDate {
     font-size: 0.5rem;
   }
+}
+
+.comment-bg {
+  background-color: #f0f2f5 !important;
+}
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.postDeleteIcon {
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.5s all ease-in-out;
+}
+.postDeleteIcon:hover {
+  opacity: 1;
+}
+.no-comments {
+  display: block;
+  margin: 1rem;
 }

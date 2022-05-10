@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import Topbar from "../../components/topbar/Topbar";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Rightbar from "../../components/rightbar/Rightbar";
-import SinglePost from "../../components/singlePost/SinglePost";
+import Post from "../../components/post/Post";
 
-export default function PostDetails({ location }) {
+export default function PostDetails() {
   const { postId } = useParams();
   const [post, setPost] = useState();
 
@@ -29,9 +29,7 @@ export default function PostDetails({ location }) {
       <div className="postContainer">
         <Sidebar />
         <div className="feed">
-          <div className="feedWrapper">
-            {post && <SinglePost post={post} liked={location.state.isLiked} />}
-          </div>
+          <div className="feedWrapper">{post && <Post post={post} />}</div>
         </div>
         <Rightbar hideImg={false} home={true} />
       </div>
