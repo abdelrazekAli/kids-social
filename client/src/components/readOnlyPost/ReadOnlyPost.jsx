@@ -7,13 +7,7 @@ export default function ReadOnlyPost({ post }) {
     <div className="readOnlyPost post">
       <div className="postWrapper">
         <div className="postCenter">
-          {postImg && (
-            <img
-              className="postImg"
-              src={`/images/posts/${postImg}`}
-              alt="postImg"
-            />
-          )}
+          {postImg && <img src={`/images/posts/${postImg}`} alt="postImg" />}
           <span className="postText">{post.desc}</span>
         </div>
       </div>

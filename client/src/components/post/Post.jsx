@@ -54,7 +54,7 @@ export default function Post({ post, feed }) {
   // Handle like
   const likeHandler = async () => {
     // Check if user already like post or not
-    if (!likes.some((l) => l.username === user.username)) {
+    if (!likes.some((l) => l._id === user._id)) {
       // Add user to likes array
       setLikes([
         ...likes,
@@ -66,7 +66,7 @@ export default function Post({ post, feed }) {
       ]);
     } else {
       // Remove user from likes array
-      setLikes(likes.filter((l) => l.username !== user.username));
+      setLikes(likes.filter((l) => l._id !== user._id));
     }
 
     // Put like into database
@@ -85,7 +85,7 @@ export default function Post({ post, feed }) {
 
   // Show/Hide likes after 3 seconds
   const toggleShowLikes = () => {
-    if (!showLikes) {
+    if (!showLikes && likes.length > 0) {
       setShowLikes(true);
       setTimeout(() => {
         setShowLikes(false);

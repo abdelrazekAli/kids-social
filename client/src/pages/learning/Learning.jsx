@@ -52,7 +52,7 @@ export default function Learning() {
                 <h3 className="card__heading">Space</h3>
               </div>
             </Link>
-            <Link className="card" to="/learning/images/programming">
+            <Link className="card" to="/learning/programming">
               <div
                 className="card__background"
                 style={{
