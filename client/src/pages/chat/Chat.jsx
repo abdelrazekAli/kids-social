@@ -3,9 +3,10 @@ import "./chat.css";
 import axios from "axios";
 import { v1 as uuid } from "uuid";
 import { io } from "socket.io-client";
+import ReactHowler from "react-howler";
 import Button from "@material-ui/core/Button";
-import { Context, axiosJWT } from "../../context/Context";
 import { Link, useParams } from "react-router-dom";
+import { Context, axiosJWT } from "../../context/Context";
 import { Send, Videocam, Phone } from "@material-ui/icons";
 import { useContext, useEffect, useState, useRef } from "react";
 import { CircularProgress, IconButton } from "@material-ui/core";
@@ -107,6 +108,7 @@ export default function Chat() {
   useEffect(() => {
     socket.current.on("offering call", (data) => {
       setOfferCall(true);
+      // sound.play();
       setCallType(data.callType);
       setCallId(data.callId);
     });
@@ -168,7 +170,7 @@ export default function Chat() {
 
   // Answer call
   const answerCall = () => {
-    console.log(callType);
+    // sound.unload();
     let url;
     callType === "video"
       ? (url = `/room/video/${callId}`)
@@ -218,6 +220,12 @@ export default function Chat() {
     <>
       <Topbar />
       <div className="chatContainer">
+        {/* Play sound on call */}
+        <ReactHowler
+          src="/voices/ringtone.mp3"
+          playing={offerCall}
+          loop={true}
+        />
         <Sidebar />
         <div className="container-fluid my-1">
           <div className="row justify-content-center h-100">

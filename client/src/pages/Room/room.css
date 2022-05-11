@@ -27,3 +27,9 @@
 .room-container video {
   border-radius: 7px;
 }
+
+@media (max-width: 769px) {
+  .room-container .w-50 {
+    width: 100%;
+  }
+}
