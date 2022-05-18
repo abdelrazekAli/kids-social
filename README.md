@@ -2,6 +2,13 @@
 
 > Social media website for kids
 
+- Posts, comments, and likes.
+- Realtime chat with online friends using WebSocket.
+- Video, voice calls, and voice records using WebRTC.
+- Searching for new friends.
+- Friend requests and invitation by email.
+- Posts for learning and more other features ...
+
 ## Demo
 
 #### https://hello-chat-abdelrazek.herokuapp.com
