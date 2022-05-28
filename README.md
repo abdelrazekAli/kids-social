@@ -63,3 +63,13 @@
 ### Signup
 <img src="https://user-images.githubusercontent.com/78452508/168935872-5cf938d3-8d5a-419c-9cb7-63fd40729c65.png"/>
 
+## Diagrams
+
+### ER diagram
+<img src="https://user-images.githubusercontent.com/78452508/170824075-9820d24e-4b29-4da4-bcc7-77d174605fbd.jpg"/>
+
+### Class diagram
+<img src="https://user-images.githubusercontent.com/78452508/170824331-c7b253e3-f8c2-4b6c-a2a3-e80785f0e94d.jpg"/>
+
+
+
