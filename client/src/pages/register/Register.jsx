@@ -19,7 +19,6 @@ export default function Register() {
   });
   const handleForm = async (e) => {
     e.preventDefault();
-    console.log("hi", password.current.value, confirmPassword.current.value);
     if (password.current.value !== confirmPassword.current.value) {
       return setError({ isError: true, msg: "Passwords are not the same" });
     }

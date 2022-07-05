@@ -56,7 +56,7 @@
 .learning-cards .card__background {
   background-size: cover;
   background-position: center;
-  border-radius: 24px;
+  border-radius: 15px;
   bottom: 0;
   filter: brightness(0.75) saturate(1.2) contrast(0.85);
   left: 0;

@@ -20,9 +20,9 @@ require("./socket/socket")(io);
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
 const postRoute = require("./routes/posts");
+const uploadRoute = require("./routes/upload");
 const commentRoute = require("./routes/comments");
 const messageRoute = require("./routes/messages");
-const uploadRoute = require("./routes/upload");
 const conversationRoute = require("./routes/conversations");
 
 // Dotenv configuration

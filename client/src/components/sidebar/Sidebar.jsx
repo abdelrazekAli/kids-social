@@ -42,8 +42,8 @@ export default function Sidebar() {
 
   const handleSearch = async (search) => {
     try {
+      setSearchValue(search);
       if (search.length > 0) {
-        setSearchValue(search);
         // Get users
         const res = await axios.get(`/api/v1/users?search=${search}`);
         setUsers(res.data);
@@ -134,12 +134,6 @@ export default function Sidebar() {
                 <span className="sidebarListItemText">Home</span>
               </li>
             </NavLink>
-            <NavLink to="/learning" exact={true}>
-              <li className="sidebarListItem">
-                <School className="sidebarIcon " />
-                <span className="sidebarListItemText">Learning</span>
-              </li>
-            </NavLink>
             <NavLink to={`/profile/${user._id}`}>
               <li className="sidebarListItem">
                 <Person className="sidebarIcon" />
@@ -156,6 +150,12 @@ export default function Sidebar() {
               <li className="sidebarListItem">
                 <Chat className="sidebarIcon" />
                 <span className="sidebarListItemText">Chats</span>
+              </li>
+            </NavLink>
+            <NavLink to="/learning" exact={true}>
+              <li className="sidebarListItem">
+                <School className="sidebarIcon " />
+                <span className="sidebarListItemText">Learning</span>
               </li>
             </NavLink>
             <NavLink to="/settings">
@@ -185,13 +185,14 @@ export default function Sidebar() {
               <Search />
               <input
                 placeholder="Search for new friends"
-                onKeyUp={(e) => handleSearch(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 maxLength={20}
                 className="searchInput"
               />
             </div>
             <div className="mt-1">
               {Array.isArray(users) &&
+                searchValue.length > 0 &&
                 (users.length > 0 ? (
                   users.map((u) => <Friend key={u._id} user={u} />)
                 ) : (

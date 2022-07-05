@@ -48,7 +48,7 @@ export default function Rightbar({
     return (
       <>
         <div className="btn-container"></div>
-        <h4 className="rightbarTitle">friends</h4>
+        <h4 className="rightbarTitle">Friends</h4>
         {userFriends?.length > 0 ? (
           <div className="rightbarFollowings">
             {userFriends.map((u) => (
