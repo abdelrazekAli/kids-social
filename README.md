@@ -11,7 +11,7 @@
 
 ## Demo
 
-#### https://hello-chat-abdelrazek.herokuapp.com
+#### https://kids-social.herokuapp.com
 
 ## Screenshots
 
