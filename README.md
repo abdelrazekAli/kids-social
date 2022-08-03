@@ -1,10 +1,10 @@
 # Kids Social
 
-> Social media website for kids
+> A Social media website for kids built with React.js, Node.js, WebSocket, WebRTC ,and MongoDB that support features like:
 
 - Posts, comments, and likes.
-- Real-time chat with online friends using WebSocket.
-- Video, voice calls, and voice messages using WebRTC.
+- Real-time chat with online friends.
+- Video, voice calls, and voice messages.
 - Searching for new friends.
 - Friend requests and invitations by email.
 - Posts for learning and more other features ...
