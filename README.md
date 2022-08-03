@@ -3,10 +3,10 @@
 > Social media website for kids
 
 - Posts, comments, and likes.
-- Realtime chat with online friends using WebSocket.
+- Real-time chat with online friends using WebSocket.
 - Video, voice calls, and voice messages using WebRTC.
 - Searching for new friends.
-- Friend requests and invitation by email.
+- Friend requests and invitations by email.
 - Posts for learning and more other features ...
 
 ## Demo
