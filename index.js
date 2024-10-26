@@ -2,12 +2,19 @@
 const cors = require("cors");
 const path = require("path");
 const morgan = require("morgan");
+const mongoSanitize = require("express-mongo-sanitize")
 
 // Server INIT
 const http = require("http");
 const express = require("express");
 const app = express();
 const server = http.createServer(app);
+
+// Middlewares
+app.use(cors());
+app.use(express.json());
+app.use(mongoSanitize());
+app.use(morgan("common"));
 
 // Websocket INIT
 const socket = require("socket.io");
@@ -40,10 +47,6 @@ require("mongoose").connect(process.env.DB_URL, connectOptions, () => {
   console.log("Connected to DB");
 });
 
-// Main Middlewares
-app.use(cors());
-app.use(express.json());
-app.use(morgan("common"));
 
 // Multimedia Middlewares
 app.use("/images", express.static(path.join(__dirname, "public/images")));
