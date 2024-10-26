@@ -2,8 +2,9 @@
 
 > A Social media platform specifically designed for kids, built with React.js, Node.js, WebSocket, WebRTC, and MongoDB.
 
-- Developed features like posts, comments, reactions, Friend Requests, and invitations via email.
+- Developed core social media features like posts, comments, reactions, friend requests, and invitations via email.
 - Integrated WebSocket and WebRTC for real-time chat, video, voice calls, and voice messages.
+- Applied security best practices like rate limiting, CORS, JWT, encryption, data validation, and sanitization.
   
 
 ## Screenshots
